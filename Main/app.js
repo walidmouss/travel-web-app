@@ -14,4 +14,13 @@ app.get('/', function(req, res) {
   res.render('login'); 
 });
 
+var MongoClient = require('mongodb').MongoClient;
+
+MongoClient.connect("mongodb://localhost:27017/", function(err, client){
+  if (err) throw err;
+  var db = client.db('MyDB');
+  console.log('Hi');
+  db.collection('Users').insertOne({id:1, firstName: 'Youssef', lastName: 'Hesham'});
+})
+
 app.listen(3000);
