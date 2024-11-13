@@ -14,13 +14,28 @@ app.get('/', function(req, res) {
   res.render('login'); 
 });
 
-var MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 
-MongoClient.connect("mongodb://localhost:27017/", function(err, client){
-  if (err) throw err;
-  var db = client.db('MyDB');
-  console.log('Hi');
-  db.collection('Users').insertOne({id:1, firstName: 'Youssef', lastName: 'Hesham'});
-})
+async function main() {
+    const uri = "mongodb://localhost:27017"; // Replace with your MongoDB connection string
+    const client = new MongoClient(uri);
+
+    try {
+        await client.connect();
+        console.log("Connected to MongoDB");
+
+        const database = client.db('MyDB');
+        const collection = database.collection('Users');
+
+        const doc = { name: "Company Inc", address: "Highway 37" };
+        const result = await collection.insertOne(doc);
+
+        console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    } finally {
+        await client.close();
+    }
+}
+
+main().catch(console.error);
 
 app.listen(3000);
