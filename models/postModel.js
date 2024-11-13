@@ -1,0 +1,1 @@
+// Example: Model for a post if needed

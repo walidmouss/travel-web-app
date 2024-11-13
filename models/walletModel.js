@@ -1,0 +1,1 @@
+// Example: Model for wallet-related data
