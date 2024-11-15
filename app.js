@@ -1,8 +1,12 @@
-var express = require("express");
-var path = require("path");
-var app = express();
+const express = require("express");
+const path = require("path");
+const connectToDatabase = require("./config/dbConfig");
+const logger = require("./lib/logger");
 
-// view engine setup
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+// View engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -10,32 +14,33 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   res.render("login");
 });
 
-const { MongoClient } = require("mongodb");
+// MongoDB connection setup
+connectToDatabase()
+  .then(client => {
+    logger.log("MongoDB connection established");
+    client.close();
+  })
+  .catch(err => {
+    logger.errorLog("MongoDB connection failed");
+  });
 
-async function main() {
-  const uri = "mongodb://localhost:27017"; // Replace with your MongoDB connection string
-  const client = new MongoClient(uri);
-
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
-
-    const database = client.db("destinations");
-    const collection = database.collection("cities");
-
-    const doc = { name: "Istanbul", price: "15000" };
-    const result = await collection.insertOne(doc);
-
-    console.log(`A document was inserted with the _id: ${result.insertedId}`);
-  } finally {
-    await client.close();
-  }
+// Start server with a dynamic port checker
+function startServer(port) {
+  app.listen(port, () => {
+    logger.log(`Server running at http://localhost:${port}`);
+    logger.log(`To start the app, use 'node app.js'`);
+  }).on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+      logger.errorLog(`Port ${port} in use. Trying port ${port + 1}...`);
+      startServer(port + 1);
+    } else {
+      logger.errorLog(`Server error: ${err.message}`);
+    }
+  });
 }
 
-main().catch(console.error);
-
-app.listen(3001);
+startServer(PORT);
