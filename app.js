@@ -14,15 +14,88 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+// Global database connection
+let db;
+
+// GET route - Display login page
 app.get("/", (req, res) => {
-  res.render("login");
+  res.render("login", { error: null, email: '', showRegistrationLink: false });
+});
+
+// POST route - Handle login
+app.post("/", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Input validation
+    if (!email || !password) {
+      return res.render("login", {
+        error: "Please provide both email and password",
+        email,
+        showRegistrationLink: false
+      });
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.render("login", {
+        error: "Please enter a valid email address",
+        email,
+        showRegistrationLink: false
+      });
+    }
+
+    // Find user in database
+    const user = await db.collection('users').findOne({
+      email: email.toLowerCase()
+    });
+
+    if (!user) {
+      return res.render("login", {
+        error: `No account found with email ${email}. Please register for a new account or try another email address.`,
+        email,
+        showRegistrationLink: true
+      });
+    }
+
+    // Simple password comparison (not secure for production)
+    if (password !== user.password) {
+      return res.render("login", {
+        error: "Incorrect password. Please try again.",
+        email,
+        showRegistrationLink: false
+      });
+    }
+
+    // Successful login
+    res.redirect('/dashboard');
+
+  } catch (error) {
+    logger.errorLog('Login error:', error);
+    res.render("login", {
+      error: "An unexpected error occurred. Please try again later.",
+      email: req.body.email,
+      showRegistrationLink: false
+    });
+  }
+});
+
+// GET route - Dashboard (just as an example)
+app.get("/dashboard", (req, res) => {
+  res.send("Welcome to Dashboard"); // You'll want to create a dashboard.ejs view
+});
+
+// GET route - Registration page
+app.get("/registration", (req, res) => {
+  res.send("Registration Page"); // You'll want to create a registration.ejs view
 });
 
 // MongoDB connection setup
 connectToDatabase()
   .then(client => {
     logger.log("MongoDB connection established");
-    client.close();
+    db = client.db('yourDatabaseName'); // Store the database connection
   })
   .catch(err => {
     logger.errorLog("MongoDB connection failed");
