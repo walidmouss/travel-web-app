@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 // POST route - Handle login
-app.post("/", async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -88,7 +88,46 @@ app.get("/dashboard", (req, res) => {
 
 // GET route - Registration page
 app.get("/registration", (req, res) => {
-  res.send("Registration Page"); // You'll want to create a registration.ejs view
+  res.render("registration");
+});
+
+app.post("/register", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Input validation (add more as needed)
+    if (!username || !password) {
+      return res.render('registration', { 
+        error: 'Please provide both username and password',
+        username: username || '', // Keep the entered username
+      });
+    }
+
+    // Check if user already exists
+    const existingUser = await db.collection('users').findOne({ username });
+    if (existingUser) {
+      return res.render('registration', {
+        error: 'Username already exists',
+        username: username || '',
+      });
+    }
+
+    // Hash the password (important for security - use bcrypt or similar in production)
+    const hashedPassword = password; // Replace with actual hashing
+
+    // Insert the new user into the database
+    await db.collection('users').insertOne({ username, password: hashedPassword });
+
+    // Redirect to login page or dashboard after successful registration
+    res.redirect('/'); 
+
+  } catch (error) {
+    logger.errorLog('Registration error:', error);
+    res.render('registration', {
+      error: 'An unexpected error occurred. Please try again later.',
+      username: req.body.username || '',
+    });
+  }
 });
 
 // MongoDB connection setup

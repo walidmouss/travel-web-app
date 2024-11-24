@@ -17,40 +17,45 @@
 
   <body>
     <div class="container">
-      <h1>Welcome Back</h1>
+      <div class="row">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="error__message"><%= error %></div>
+          <% } %>
+
+          <form action="/" method="POST">
+            <h1>Login to Your Account</h1>
+            <div class="form__container">
+              <label class="form__label" for="email">Email</label>
+              <input
+                type="email"
+                id="email"  
+                name="email"
+                value="<%= typeof email !== 'undefined' ? email : '' %>"
+                required
+              />
+      
+              <label class="form__label" for="password">Password</label>
+              <input type="password" id="password" name="password" required />
+      
+              <input type="submit" value="Login" />
+  
+              <% if (typeof showRegistrationLink !== 'undefined' &&
+              showRegistrationLink) { %>
+              <div class="registration__prompt">
+                <p>Don't have an account?</p>
+                <a href="/registration" class="btn btn-outline-dark">Register Now</a>
+              </div>
+              <% } else { %>
+              <div class="text-center mt-3">
+                <a href="/registration">I don't have an account</a>
+              </div>
+              <% } %>
+            </div>
+          </form>
+    
+      </div>
     </div>
     <div class="cont">
-      <% if (typeof error !== 'undefined' && error) { %>
-      <div class="error-message"><%= error %></div>
-      <% } %>
-
-      <form method="POST">
-        <label class="form-label" for="email">Email Address:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value="<%= typeof email !== 'undefined' ? email : '' %>"
-          required
-        />
-
-        <label class="form-label" for="password">Password:</label>
-        <input type="password" id="password" name="password" required />
-
-        <input type="submit" value="Login" />
-      </form>
-
-      <% if (typeof showRegistrationLink !== 'undefined' &&
-      showRegistrationLink) { %>
-      <div class="registration-prompt">
-        <p>Don't have an account?</p>
-        <a href="/registration" class="btn btn-outline-light">Register Now</a>
-      </div>
-      <% } else { %>
-      <div class="text-center mt-3">
-        <a href="/registration">I don't have an account</a>
-      </div>
-      <% } %>
     </div>
   </body>
 </html>
