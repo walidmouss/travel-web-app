@@ -5,35 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-    crossorigin="anonymous"
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="/css/globals.css">
-    <link rel="stylesheet" href="/css/registration.css">
+    <link rel="stylesheet" href="/css/globals.css" />
+    <link rel="stylesheet" href="/css/registration.css" />
     <title>MyEgypt | Registration</title>
   </head>
 
   <body>
-    <div class="container">
-      <h1>Registration</h1>
-    </div>
-    <div class="cont">
-      <form method="post" action="/register">
-        Username: <br />
-        <input type="text" id="user" name="username" /> <br />
-        Password: <br />
-        <input type="password" id="password" name="password" /> <br />
-        <br />
-        <input
-          type="submit"
-          id="simple_click"
-          class="btn btn-secondary"
-          value="Register"
+    <div class="portal__container">
+      <figure class="portal__img--wrapper">
+        <img
+          src="/images/signup-background.jpg"
+          alt="Vacation Plane"
+          class="portal__img"
         />
-        <br />
-      </form>
+      </figure>
+      <div class="portal__form">
+        <div class="container">
+          <div class="row">
+            <form method="post" action="/register">
+              <% if (typeof error !== 'undefined' && error) { %>
+                <div class="error__message"><%= error %></div>
+              <% } %>
+              <h1>Create Your Account</h1>
+              <div class="form__container">
+                <label class="form__label" for="user">Username</label>
+                <input 
+                  type="text" 
+                  id="user" 
+                  name="username"
+                  value="<%= typeof username !== 'undefined' ? username : '' %>"
+                  required 
+                />
+
+                <label class="form__label" for="password">Password</label>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  required 
+                />
+
+                <input type="submit" value="Register" />
+
+                <div class="text-center mt-3">
+                  <a href="/login">I already have an account</a>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 </html>
