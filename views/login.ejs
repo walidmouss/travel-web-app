@@ -27,11 +27,11 @@
       <div class="portal__form">
         <div class="container">
           <div class="row">
-            <% if (typeof error !== 'undefined' && error) { %>
-            <div class="error__message"><%= error %></div>
-            <% } %>
 
             <form action="/login" method="POST">
+              <% if (typeof error !== 'undefined' && error) { %>
+                <div class="error__message"><%= error %></div>
+              <% } %>
               <h1>Login to Your Account</h1>
               <div class="form__container">
                 <label class="form__label" for="email">Email</label>
