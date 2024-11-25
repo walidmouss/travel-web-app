@@ -81,6 +81,16 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Add this route to handle GET requests to /login
+app.get("/login", (req, res) => {
+  res.render("login", { error: null, email: '', showRegistrationLink: false });
+});
+
+// Keep your existing root route as a redirect to /login
+app.get("/", (req, res) => {
+  res.redirect("/login");
+});
+
 // GET route - Dashboard (just as an example)
 app.get("/dashboard", (req, res) => {
   res.send("Welcome to Dashboard"); // You'll want to create a dashboard.ejs view
