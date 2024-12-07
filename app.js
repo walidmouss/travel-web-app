@@ -11,7 +11,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Global database connection
@@ -89,6 +89,91 @@ app.get("/login", (req, res) => {
 // Keep your existing root route as a redirect to /login
 app.get("/", (req, res) => {
   res.redirect("/login");
+});
+
+// GET route - Homepage after login
+app.get("/home", (req, res) => {
+  console.log("GET /home route hit");
+  res.render("home");
+});
+
+/////////////////////// home page options /////////////////////////////
+
+app.get("/hiking", (req, res) => {
+  res.render("hiking");
+});
+
+app.get("/cities", (req, res) => {
+  res.render("cities");
+});
+
+app.get("/islands", (req, res) => {
+  res.render("islands");
+});
+
+app.get("/wanttogo", (req, res) => {
+  res.render("wanttogo");
+});
+
+//////////////////// hiking option //////////////////
+
+app.get("/hiking/inca", (req, res) => {
+  res.render("inca");
+});
+
+app.get("/hiking/annapurna", (req, res) => {
+  res.render("annapurna");
+});
+
+/////////////////// cities options //////////////////////
+
+app.get("/cities/paris", (req, res) => {
+  res.render("paris");
+});
+
+app.get("/cities/rome", (req, res) => {
+  res.render("rome");
+});
+
+////////////////// islands options //////////////////////
+
+app.get("/islands/bali", (req, res) => {
+  res.render("bali");
+});
+
+app.get("/islands/santorini", (req, res) => {
+  res.render("santorini");
+});
+
+
+
+///////////////////////// POST route for search ^_^ (25%)///////////////////////////////
+
+//here we related the names of each island/hike/city to its url (similar to a hash table)
+const places = [
+  {name : "annapuna" , url:"/hiking/annapuna"},
+  {name : "bali" , url:"/islands/bali"}, 
+  {name : "inca" , url:"/hiking/inca"}, 
+  {name : "paris" , url:"/cities/paris"}, 
+  {name : "rome" , url: "/cities/rome"}, 
+  {name : "santorini" , url: "/islands/santorini"}]
+
+app.post("/search" , (req , res) =>{
+   const {Search} = req.body;
+   console.log(req.body);
+   // if there is no input data output an error
+   if (!Search) {
+    return res.status(400).json({ error: 'Search term is missing' });
+  }
+   //.filter creates a new array that satisfies a certain criteria
+   const out = places.filter((places) => {
+    // used the function .tolowercase() to be case insensitive
+    return places.name.toLowerCase().includes(Search.toLowerCase())
+   })
+   // Respond with the search term and filtered results (out)
+   res.json({ searchTerm: Search, results: out });
+
+   //res.json({find});
 });
 
 // GET route - Dashboard (just as an example)
