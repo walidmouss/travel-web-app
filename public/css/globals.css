@@ -150,7 +150,6 @@ input[type="submit"]:active {
 .portal__img--wrapper {
   flex: 0 0 60%;
   position: relative;
-  border-radius: 0 2rem 2rem 0;
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   height: 100vh;
@@ -301,7 +300,6 @@ a:hover {
     width: 100%;
     height: 40vh;
     min-height: 300px;
-    border-radius: 0 0 2rem 2rem;
   }
   
   .portal__form {
