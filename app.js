@@ -167,7 +167,7 @@ app.post("/search", (req, res) => {
 
 // GET route - Dashboard (just as an example)
 app.get("/dashboard", (req, res) => {
-  res.render("dashboard"); // You'll want to create a dashboard.ejs view
+  res.render("dashboard");
 });
 
 // GET route - Registration page
