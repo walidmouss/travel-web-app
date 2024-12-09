@@ -25,3 +25,30 @@ const ansiColors = {
   bgCyan: "\x1b[46m",
   bgWhite: "\x1b[47m",
 };
+
+const places = [
+  { 
+    name: "annapuna", 
+    url: "/hiking/annapuna" 
+  },
+  { 
+    name: "bali", 
+    url: "/islands/bali" 
+  },
+  { 
+    name: "inca", 
+    url: "/hiking/inca" 
+  },
+  { 
+    name: "paris", 
+    url: "/cities/paris" 
+  },
+  { 
+    name: "rome", 
+    url: "/cities/rome" 
+  },
+  { 
+    name: "santorini", 
+    url: "/islands/santorini" 
+  },
+];

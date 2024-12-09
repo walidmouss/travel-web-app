@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const connectToDatabase = require("./config/dbConfig");
 const logger = require("./lib/logger");
+const places = require("./constants/index.js");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -145,16 +146,6 @@ app.get("/islands/santorini", (req, res) => {
 });
 
 ///////////////////////// POST route for search ^_^ (25%)///////////////////////////////
-
-//here we related the names of each island/hike/city to its url (similar to a hash table)
-const places = [
-  { name: "annapuna", url: "/hiking/annapuna" },
-  { name: "bali", url: "/islands/bali" },
-  { name: "inca", url: "/hiking/inca" },
-  { name: "paris", url: "/cities/paris" },
-  { name: "rome", url: "/cities/rome" },
-  { name: "santorini", url: "/islands/santorini" },
-];
 
 app.post("/search", (req, res) => {
   const { Search } = req.body;
