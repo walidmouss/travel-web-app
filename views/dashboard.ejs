@@ -22,9 +22,9 @@
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <div class="relative h-64 rounded-lg overflow-hidden">
-                <img src="/api/placeholder/800/480" alt="Featured Destination" class="w-full h-full object-cover">
+                <img src="https://source.unsplash.com/random/800x480?santorini" alt="Santorini, Greece" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-                  <h3 class="text-white text-2xl font-bold">Ericeira, Portugal</h3>
+                  <h3 class="text-white text-2xl font-bold">Santorini, Greece</h3>
                   <p class="text-white text-lg">$2,875/mo</p>
                 </div>
               </div>
@@ -32,38 +32,17 @@
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">
-              Latest Meetups
+              Locations
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <ul class="divide-y divide-gray-200">
-                <li class="py-4 flex">
-                  <div class="flex-shrink-0">
-                    <img class="h-10 w-10 rounded-full" src="/api/placeholder/40/40" alt="">
-                  </div>
-                  <div class="ml-3">
-                    <div class="font-medium text-gray-900">Thu 12th Dec: Chiang Mai</div>
-                    <div class="text-gray-500">4 RSVPs</div>
-                  </div>
-                </li>
-                <li class="py-4 flex">
-                  <div class="flex-shrink-0">
-                    <img class="h-10 w-10 rounded-full" src="/api/placeholder/40/40" alt="">
-                  </div>
-                  <div class="ml-3">
-                    <div class="font-medium text-gray-900">Mon 9th Dec: Playa del Carmen</div>
-                    <div class="text-gray-500">2 RSVPs</div>
-                  </div>
-                </li>
-                <li class="py-4 flex">
-                  <div class="flex-shrink-0">
-                    <img class="h-10 w-10 rounded-full" src="/api/placeholder/40/40" alt="">
-                  </div>
-                  <div class="ml-3">
-                    <div class="font-medium text-gray-900">Sat 7th Dec: Chiang Mai</div>
-                    <div class="text-gray-500">8 RSVPs</div>
-                  </div>
-                </li>
-              </ul>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <%- include('components/LocationCard', { name: 'Annapurna', url: '/hiking/annapurna', image: 'https://source.unsplash.com/random/400x320?annapurna', price: '$1,139/mo' }) %>
+                <%- include('components/LocationCard', { name: 'Bali', url: '/islands/bali', image: 'https://source.unsplash.com/random/400x320?bali', price: '$1,139/mo' }) %>
+                <%- include('components/LocationCard', { name: 'Inca', url: '/hiking/inca', image: 'https://source.unsplash.com/random/400x320?inca', price: '$1,139/mo' }) %>
+                <%- include('components/LocationCard', { name: 'Paris', url: '/cities/paris', image: 'https://source.unsplash.com/random/400x320?paris', price: '$1,139/mo' }) %>
+                <%- include('components/LocationCard', { name: 'Rome', url: '/cities/rome', image: 'https://source.unsplash.com/random/400x320?rome', price: '$1,139/mo' }) %>
+                <%- include('components/LocationCard', { name: 'Santorini', url: '/islands/santorini', image: 'https://source.unsplash.com/random/400x320?santorini', price: '$2,875/mo' }) %>
+              </div>
             </dd>
           </div>
         </dl>
