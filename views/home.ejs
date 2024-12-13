@@ -43,12 +43,18 @@
       font-size: 1rem;
     }
 
+    /* Ensure search-btn is visible and properly displayed */
     .search-btn {
       background-color: #0891b2;
       color: white;
       padding: 0 12px;
+      font-size: 8px;
       border: none;
       border-radius: 0 9999px 9999px 0;
+      visibility: visible; /* Ensure it's not hidden */
+      display: inline-flex; /* Ensure it displays properly */
+      justify-content: center;
+      align-items: center;
     }
 
     /* Card Styling */
@@ -130,7 +136,7 @@
 
   <!-- Want-to-Go List -->
   <div class="container mx-auto px-6 mt-12 text-center flex flex-col justify-between items-center gap-4">
-    <a href='/wanttogo' class="view-btn w-64 mx-auto">
+    <a href='/want-to-go' class="view-btn w-64 mx-auto">
       Want-to-Go List
     </a>
     <a href='/dashboard' class="view-btn w-64 mx-auto">

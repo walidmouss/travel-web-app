@@ -42,12 +42,18 @@
       font-size: 1rem;
     }
 
+    /* Ensure search-btn is visible and properly displayed */
     .search-btn {
       background-color: #0891b2;
       color: white;
       padding: 0 12px;
+      font-size: 8px;
       border: none;
       border-radius: 0 9999px 9999px 0;
+      visibility: visible; /* Ensure it's not hidden */
+      display: inline-flex; /* Ensure it displays properly */
+      justify-content: center;
+      align-items: center;
     }
 
     .location-search-bar {
@@ -140,7 +146,7 @@
     <div class="content flex flex-col justify-between items-start gap-4">
       <h1 class="font-bold text-xl"><%= name %></h1>
       <p><%= description %></p>
-      <button id="wanttogo" class="location-wish-btn">
+      <button id="want-to-go" class="location-wish-btn">
         Add to Want-to-Go List
       </button>
     </div>
