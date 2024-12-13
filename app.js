@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const connectToDatabase = require("./config/dbConfig");
 const logger = require("./lib/logger");
-const places = require("./constants/index.js");
+const { locations } = require("./constants");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -155,9 +155,9 @@ app.post("/search", (req, res) => {
     return res.status(400).json({ error: "Search term is missing" });
   }
   //.filter creates a new array that satisfies a certain criteria
-  const out = places.filter((places) => {
+  const out = locations.filter((locations) => {
     // used the function .tolowercase() to be case insensitive
-    return places.name.toLowerCase().includes(Search.toLowerCase());
+    return locations.name.toLowerCase().includes(Search.toLowerCase());
   });
   // Respond with the search term and filtered results (out)
   res.json({ searchTerm: Search, results: out });
