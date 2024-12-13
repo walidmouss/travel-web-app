@@ -6,9 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Destinations</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
+  <link rel="stylesheet" href="/css/h=globals.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Navbar Styling */
+    .navbar {
+      z-index: 10; /* This will ensure the navbar stays on top */
+    }
+
+    .category-card, .view-btn, .location-wish-btn {
+      position: relative;
+      z-index: 20; /* Ensure buttons and cards stay above the background blobs */
+    }
+
     .navbar-title {
       font-family: 'Dancing Script', cursive;
       font-size: 1.75rem;
@@ -125,10 +135,19 @@
   </div>
 
   <!-- Want-to-Go List -->
-  <div class="container mx-auto px-6 mt-12 text-center">
+  <div class="container mx-auto px-6 mt-12 text-center flex flex-col justify-between items-center gap-4">
     <button onclick="location.href = '/wanttogo';" class="view-btn w-64 mx-auto">
       Want-to-Go List
     </button>
+    <a href='/dashboard' class="view-btn w-64 mx-auto">
+      To the dashboard
+    </a>
+  </div>
+
+  <!-- Background blob effect -->
+  <div class="portal__form--bg absolute inset-0 z-0">
+    <div class="portal__form--bg-gradient-1 absolute inset-0 z-0"></div>
+    <div class="portal__form--bg-gradient-2 absolute inset-0 z-0"></div>
   </div>
 </body>
 

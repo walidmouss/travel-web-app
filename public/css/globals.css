@@ -266,6 +266,7 @@ input[type="submit"]:active {
 .portal__form--bg {
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1), rgba(99, 102, 241, 0.1));
   backdrop-filter: blur(20px);
+  z-index: -1;
 }
 
 .portal__form--bg-gradient-1 {
@@ -276,6 +277,7 @@ input[type="submit"]:active {
     rgba(192, 38, 211, 0.02) 100%
   );
   animation: rotate 20s linear infinite;
+  z-index: -2;
 }
 
 .portal__form--bg-gradient-2 {
@@ -285,6 +287,7 @@ input[type="submit"]:active {
     rgba(99, 102, 241, 0.04) 100%
   );
   animation: pulse 8s ease-in-out infinite;
+  z-index: -3;
 }
 
 /* New decorative background elements */

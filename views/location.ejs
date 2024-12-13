@@ -9,6 +9,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Navbar Styling */
+    .navbar {
+      z-index: 10; /* This will ensure the navbar stays on top */
+    }
+
+    .category-card, .view-btn, .location-wish-btn {
+      position: relative;
+      z-index: 20; /* Ensure buttons and cards stay above the background blobs */
+    }
+    
     .navbar-title {
       font-family: 'Dancing Script', cursive;
       font-size: 1.75rem;
@@ -126,6 +135,12 @@
     <video controls class="rounded-lg shadow-lg w-full">
       <source src="<%= video %>" type="video/mp4">
     </video>
+  </div>
+
+  <!-- Background blob effect -->
+  <div class="portal__form--bg absolute inset-0 z-0">
+    <div class="portal__form--bg-gradient-1 absolute inset-0 z-0"></div>
+    <div class="portal__form--bg-gradient-2 absolute inset-0 z-0"></div>
   </div>
 </body>
 
