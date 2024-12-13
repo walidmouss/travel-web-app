@@ -183,6 +183,11 @@ app.post("/register", async (req, res) => {
   }
 });
 
+// GET route - Want-to-go page
+app.get("/want-to-go", (req, res) => {
+  res.render("want-to-go");
+});
+
 // MongoDB connection setup
 connectToDatabase()
   .then((client) => {
