@@ -36,12 +36,9 @@
             </dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <%- include('components/LocationCard', { name: 'Annapurna', url: '/hiking/annapurna', image: 'https://source.unsplash.com/random/400x320?annapurna', price: '$1,139/mo' }) %>
-                <%- include('components/LocationCard', { name: 'Bali', url: '/islands/bali', image: 'https://source.unsplash.com/random/400x320?bali', price: '$1,139/mo' }) %>
-                <%- include('components/LocationCard', { name: 'Inca', url: '/hiking/inca', image: 'https://source.unsplash.com/random/400x320?inca', price: '$1,139/mo' }) %>
-                <%- include('components/LocationCard', { name: 'Paris', url: '/cities/paris', image: 'https://source.unsplash.com/random/400x320?paris', price: '$1,139/mo' }) %>
-                <%- include('components/LocationCard', { name: 'Rome', url: '/cities/rome', image: 'https://source.unsplash.com/random/400x320?rome', price: '$1,139/mo' }) %>
-                <%- include('components/LocationCard', { name: 'Santorini', url: '/islands/santorini', image: 'https://source.unsplash.com/random/400x320?santorini', price: '$2,875/mo' }) %>
+                <% locations.forEach(location => { %>
+                  <%- include('components/LocationCard', location) %>
+                <% }); %>
               </div>
             </dd>
           </div>

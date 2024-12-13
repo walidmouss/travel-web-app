@@ -52,3 +52,44 @@ const places = [
     url: "/islands/santorini" 
   },
 ];
+
+const locations = [
+  {
+    name: 'Annapurna',
+    url: '/hiking/annapurna',
+    image: '/annapurna.png',
+    price: '$1,139/mo'
+  },
+  {
+    name: 'Bali',
+    url: '/islands/bali',
+    image: '/bali.png',
+    price: '$1,139/mo'
+  },
+  {
+    name: 'Inca',
+    url: '/hiking/inca',
+    image: '/inca.png',
+    price: '$1,139/mo'
+  },
+  {
+    name: 'Paris',
+    url: '/cities/paris',
+    image: '/paris.png',
+    price: '$1,139/mo'
+  },
+  {
+    name: 'Rome',
+    url: '/cities/rome',
+    image: '/rome.png',
+    price: '$1,139/mo'
+  },
+  {
+    name: 'Santorini',
+    url: '/islands/santorini',
+    image: '/santorini.png',
+    price: '$2,875/mo'
+  }
+];
+
+module.exports = { ansiColors, places, locations };

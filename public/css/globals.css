@@ -148,6 +148,8 @@ input[type="submit"]:active {
 }
 
 .portal__img--wrapper {
+  border-top-right-radius: 24px;
+  border-bottom-right-radius: 24px;
   flex: 0 0 60%;
   position: relative;
   box-shadow: var(--shadow-lg);
