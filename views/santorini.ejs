@@ -3,7 +3,7 @@
   <head>
     <style>
       body {
-        background-image: url("background3.jpg");
+        background-image: url("<%= location.backgroundImage %>");
         background-repeat: no-repeat;
         background-size: 100%;
       }
@@ -48,7 +48,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Santorini Island</title>
+    <title><%= location.name %></title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -60,7 +60,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
       <a class="navbar-brand" style="color: rgb(191, 255, 161)"
-        >Santorini Island</a
+        ><%= location.name %></a
       >
       <button
         class="navbar-toggler"
@@ -90,13 +90,10 @@
       </div>
     </nav>
     <div class="container1">
-      <img id="image" src="/santorini.png" width="193" height="300" />
+      <img id="image" src="<%= location.image %>" width="193" height="300" />
     </div>
     <div class="container2">
-      With its stunning turquoise waters and picturesque villages, great
-      activities including wine-tasting, authentic Greek cuisine, regular boat
-      excursions due to its ideal location for island hopping, small Greek
-      island of Santorini became so popular as a holiday destination.
+      <%= location.description %>
     </div>
     <div class="wanttogo">
       <button id="wanttogo" class="btn btn-secondary ml-3">
@@ -105,7 +102,7 @@
     </div>
     <div class="video">
       <video width="480" height="360" controls>
-        <source src="/santorini.mp4" />
+        <source src="<%= location.video %>" />
       </video>
     </div>
   </body>

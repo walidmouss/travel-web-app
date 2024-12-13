@@ -97,53 +97,21 @@ app.get("/home", (req, res) => {
   res.render("home");
 });
 
-/////////////////////// home page options /////////////////////////////
+// Dynamic route to handle all location pages
+app.get("/:category/:location", (req, res) => {
+  const { category, location } = req.params;
 
-app.get("/hiking", (req, res) => {
-  res.render("hiking");
+  // Find the location data from the locations array
+  const locationData = locations.find(loc => loc.url === `/${category}/${location}`)
+
+  // Ensure the location exists in locationData
+  if (locationData) {
+    res.render('location', locationData);
+  } else {
+    res.status(404).send('Location not found');
+  }
 });
 
-app.get("/cities", (req, res) => {
-  res.render("cities");
-});
-
-app.get("/islands", (req, res) => {
-  res.render("islands");
-});
-
-app.get("/wanttogo", (req, res) => {
-  res.render("wanttogo");
-});
-
-//////////////////// hiking option //////////////////
-
-app.get("/hiking/inca", (req, res) => {
-  res.render("inca");
-});
-
-app.get("/hiking/annapurna", (req, res) => {
-  res.render("annapurna");
-});
-
-/////////////////// cities options //////////////////////
-
-app.get("/cities/paris", (req, res) => {
-  res.render("paris");
-});
-
-app.get("/cities/rome", (req, res) => {
-  res.render("rome");
-});
-
-////////////////// islands options //////////////////////
-
-app.get("/islands/bali", (req, res) => {
-  res.render("bali");
-});
-
-app.get("/islands/santorini", (req, res) => {
-  res.render("santorini");
-});
 
 ///////////////////////// POST route for search ^_^ (25%)///////////////////////////////
 
