@@ -60,6 +60,14 @@ form {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+a, button {
+  background-color: var(--primary-color);
+}
+
+a, button:hover {
+  background-color: var(--primary-hover);
+}
+
 h1 {
   font-size: 1.875rem;
   color: var(--dark);
