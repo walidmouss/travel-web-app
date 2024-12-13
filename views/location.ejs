@@ -5,40 +5,99 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= name %></title>
-  <link rel="stylesheet" href="/css/globals.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .location-search-bar {
-      max-width: 300px; /* Restrict width */
-      height: 40px; /* Set a fixed height */
+    /* Navbar Styling */
+    .navbar-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.75rem;
+      color: #2C3E50;
     }
-  
+
+    .location-search-bar {
+      max-width: 350px;
+      height: 42px;
+      border-radius: 9999px; /* Makes the search bar rounded */
+      overflow: hidden;
+    }
+
     .location-input {
-      width: 100%; /* Ensure input spans full width inside the bar */
-      height: 100%; /* Align input with the bar height */
+      width: 100%;
+      padding: 0 12px;
+      height: 100%;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .location__search { 
+      background-color: #0891b2;
+      color: white;
     }
 
     .location-wish-btn {
-      color: white; /* Ensure text is always white */
-      background-color: var(--primary-color); /* Use custom primary color */
+      background-color: #0891b2;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      color: #fff;
+      font-weight: bold;
+      transition: all 0.3s ease;
     }
 
     .location-wish-btn:hover {
-      background-color: var(--primary-hover);
-      color: white; /* Ensure consistent contrast */
+      background-color: #0e7490;
+    }
+
+    /* Image and Content Section */
+    .image-container img {
+      width: 500px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .content h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #2C3E50;
+    }
+
+    .content p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Responsive Layout */
+    @media (max-width: 768px) {
+      .image-container img {
+        width: 100%;
+        height: auto;
+      }
+
+      .content h1 {
+        text-align: center;
+      }
+
+      .location-search-bar {
+        margin-top: 12px;
+        width: 100%;
+      }
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen bg-gray-100 flex flex-col">
   <!-- Navbar -->
-  <nav class="bg-transparent fixed top-0 left-0 w-full py-4 z-10">
+  <nav class="bg-white shadow-md fixed top-0 left-0 w-full py-4 z-10">
     <div class="container mx-auto flex items-center justify-between px-6">
-      <a class="text-xl font-bold"><%= name %></a>
-      <form method="POST" action="/search" class="location-search-bar flex items-center bg-white rounded-full shadow-lg overflow-hidden">
+      <a href="/home" class="navbar-title">MyEgypt</a>
+      <form method="POST" action="/search" class="location-search-bar flex items-center shadow-md location__search">
         <input type="search" name="Search" placeholder="Search" 
-          class="p-2 pl-4 text-gray-700 focus:outline-none focus:ring-2 location-input">
-        <button type="submit" class="text-white bg-cyan-600 hover:bg-cyan-700 px-4 py-2 rounded-r-full">
+          class="location-input text-gray-700">
+        <button type="submit" class="text-white px-4">
           Search
         </button>
       </form>
@@ -46,23 +105,17 @@
   </nav>
 
   <!-- Main Content -->
-  <div class="container mx-auto mt-20 px-6 grid grid-cols-1 sm:grid-cols-2 gap-8 items-start">
+  <div class="container mx-auto mt-28 px-6 grid grid-cols-1 sm:grid-cols-2 gap-12 items-start">
     <!-- Left: Image -->
-    <div class="flex justify-center">
-      <img src="<%= image %>" alt="Image" class="w-[300px] h-[300px] object-cover rounded-lg shadow-lg" />
+    <div class="image-container">
+      <img src="<%= image %>" alt="Image of <%= name %>">
     </div>
 
     <!-- Right: Title and Description -->
-    <div>
-      <h1 class="text-2xl font-bold text-gray-900 mb-4 text-center sm:text-left">
-        <%= name %>
-      </h1>
-      <p class="text-gray-700 text-justify">
-        <%= description %>
-      </p>
-
-      <!-- Button Section -->
-      <button id="wanttogo" class="location-wish-btn bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-6 rounded-full shadow-lg">
+    <div class="content flex flex-col justify-between items-start gap-4">
+      <h1 class="font-bold text-xl"><%= name %></h1>
+      <p><%= description %></p>
+      <button id="wanttogo" class="location-wish-btn">
         Add to Want-to-Go List
       </button>
     </div>

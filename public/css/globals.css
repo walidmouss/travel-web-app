@@ -50,6 +50,80 @@ body {
   max-width: 440px;
 }
 
+/* Navbar Styling */
+.navbar-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.75rem;
+  color: #2C3E50;
+}
+
+.location-search-bar {
+  max-width: 350px;
+  height: 42px;
+  border-radius: 9999px; /* Makes the search bar rounded */
+  overflow: hidden;
+}
+
+.location-input {
+  width: 100%;
+  padding: 0 12px;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+.location-wish-btn {
+  background-color: #00bcd4;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  color: #fff;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.location-wish-btn:hover {
+  background-color: #008ba3;
+}
+
+/* Image and Content Section */
+.image-container img {
+  width: 350px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content h1 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  color: #2C3E50;
+}
+
+.content p {
+  margin-bottom: 20px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .image-container img {
+    width: 100%;
+    height: auto;
+  }
+
+  .content h1 {
+    text-align: center;
+  }
+
+  .location-search-bar {
+    margin-top: 12px;
+    width: 100%;
+  }
+}
+
 form {
   background-color: white;
   width: 100%;
@@ -61,11 +135,7 @@ form {
 }
 
 a, button {
-  background-color: var(--primary-color);
-}
-
-a, button:hover {
-  background-color: var(--primary-hover);
+  cursor: pointer;
 }
 
 h1 {
