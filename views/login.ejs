@@ -48,19 +48,9 @@
 
                 <input type="submit" value="Login" />
 
-                <% if (typeof showRegistrationLink !== 'undefined' &&
-                showRegistrationLink) { %>
-                <div class="registration__prompt">
-                  <p>Don't have an account?</p>
-                  <a href="/registration" class="btn btn-outline-dark"
-                    >Register Now</a
-                  >
+                <div class="text-center mt-3">
+                  <a class="text-center" href="/registration">I don't have an account</a>
                 </div>
-                <% } else { %>
-                  <div class="text-center mt-3">
-                    <a class="text-center" href="/registeration">I already have an account</a>
-                  </div>
-                <% } %>
               </div>
             </form>
           </div>
