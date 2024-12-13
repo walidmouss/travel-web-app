@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Destinations</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
-  <link rel="stylesheet" href="/css/h=globals.css">
+  <link rel="stylesheet" href="/css/globals.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Navbar Styling */
@@ -26,6 +26,8 @@
     }
 
     .search-bar {
+      border: 2px solid #0891b2;
+      border-radius: 9999px;
       max-width: 350px;
       height: 42px;
       border-radius: 9999px;
@@ -95,15 +97,7 @@
 
 <body class="min-h-screen bg-gray-100 flex flex-col">
   <!-- Navbar -->
-  <nav class="bg-white shadow-md fixed top-0 left-0 w-full py-4 z-10">
-    <div class="container mx-auto flex items-center justify-between px-6">
-      <a href="/home" class="navbar-title">MyEgypt</a>
-      <form method="POST" action="/search" class="search-bar flex items-center">
-        <input type="search" name="Search" placeholder="Search" class="search-input text-gray-700">
-        <button type="submit" class="search-btn">Search</button>
-      </form>
-    </div>
-  </nav>
+  <%- include('components/Nav') %>
 
   <!-- Destinations Title -->
   <div class="container mx-auto mt-28 px-6">
@@ -136,9 +130,9 @@
 
   <!-- Want-to-Go List -->
   <div class="container mx-auto px-6 mt-12 text-center flex flex-col justify-between items-center gap-4">
-    <button onclick="location.href = '/wanttogo';" class="view-btn w-64 mx-auto">
+    <a href='/wanttogo' class="view-btn w-64 mx-auto">
       Want-to-Go List
-    </button>
+    </a>
     <a href='/dashboard' class="view-btn w-64 mx-auto">
       To the dashboard
     </a>

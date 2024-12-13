@@ -17,11 +17,37 @@
       position: relative;
       z-index: 20; /* Ensure buttons and cards stay above the background blobs */
     }
-    
+
     .navbar-title {
       font-family: 'Dancing Script', cursive;
       font-size: 1.75rem;
       color: #2C3E50;
+    }
+
+    .search-bar {
+      border: 2px solid #0891b2;
+      border-radius: 9999px;
+      max-width: 350px;
+      height: 42px;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0 12px;
+      height: 100%;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .search-btn {
+      background-color: #0891b2;
+      color: white;
+      padding: 0 12px;
+      border: none;
+      border-radius: 0 9999px 9999px 0;
     }
 
     .location-search-bar {
@@ -50,6 +76,7 @@
       padding: 10px 24px;
       border-radius: 9999px;
       color: #fff;
+      font-size: 16px;
       font-weight: bold;
       transition: all 0.3s ease;
     }
@@ -100,18 +127,7 @@
 
 <body class="min-h-screen bg-gray-100 flex flex-col">
   <!-- Navbar -->
-  <nav class="bg-white shadow-md fixed top-0 left-0 w-full py-4 z-10">
-    <div class="container mx-auto flex items-center justify-between px-6">
-      <a href="/home" class="navbar-title">MyEgypt</a>
-      <form method="POST" action="/search" class="location-search-bar flex items-center shadow-md location__search">
-        <input type="search" name="Search" placeholder="Search" 
-          class="location-input text-gray-700">
-        <button type="submit" class="text-white px-4">
-          Search
-        </button>
-      </form>
-    </div>
-  </nav>
+  <%- include('components/Nav') %>
 
   <!-- Main Content -->
   <div class="container mx-auto mt-28 px-6 grid grid-cols-1 sm:grid-cols-2 gap-12 items-start">
