@@ -2,7 +2,7 @@ const express = require("express");
 const path = require("path");
 const connectToDatabase = require("./config/dbConfig");
 const logger = require("./lib/logger");
-const places = require("./constants/index.js");
+const { locations } = require("./constants");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -97,53 +97,21 @@ app.get("/home", (req, res) => {
   res.render("home");
 });
 
-/////////////////////// home page options /////////////////////////////
+// Dynamic route to handle all location pages
+app.get("/:category/:location", (req, res) => {
+  const { category, location } = req.params;
 
-app.get("/hiking", (req, res) => {
-  res.render("hiking");
+  // Find the location data from the locations array
+  const locationData = locations.find(loc => loc.url === `/${category}/${location}`)
+
+  // Ensure the location exists in locationData
+  if (locationData) {
+    res.render('location', locationData);
+  } else {
+    res.status(404).send('Location not found');
+  }
 });
 
-app.get("/cities", (req, res) => {
-  res.render("cities");
-});
-
-app.get("/islands", (req, res) => {
-  res.render("islands");
-});
-
-app.get("/wanttogo", (req, res) => {
-  res.render("wanttogo");
-});
-
-//////////////////// hiking option //////////////////
-
-app.get("/hiking/inca", (req, res) => {
-  res.render("inca");
-});
-
-app.get("/hiking/annapurna", (req, res) => {
-  res.render("annapurna");
-});
-
-/////////////////// cities options //////////////////////
-
-app.get("/cities/paris", (req, res) => {
-  res.render("paris");
-});
-
-app.get("/cities/rome", (req, res) => {
-  res.render("rome");
-});
-
-////////////////// islands options //////////////////////
-
-app.get("/islands/bali", (req, res) => {
-  res.render("bali");
-});
-
-app.get("/islands/santorini", (req, res) => {
-  res.render("santorini");
-});
 
 ///////////////////////// POST route for search ^_^ (25%)///////////////////////////////
 
@@ -155,9 +123,9 @@ app.post("/search", (req, res) => {
     return res.status(400).json({ error: "Search term is missing" });
   }
   //.filter creates a new array that satisfies a certain criteria
-  const out = places.filter((places) => {
+  const out = locations.filter((locations) => {
     // used the function .tolowercase() to be case insensitive
-    return places.name.toLowerCase().includes(Search.toLowerCase());
+    return locations.name.toLowerCase().includes(Search.toLowerCase());
   });
   // Respond with the search term and filtered results (out)
   res.json({ searchTerm: Search, results: out });
@@ -167,7 +135,12 @@ app.post("/search", (req, res) => {
 
 // GET route - Dashboard (just as an example)
 app.get("/dashboard", (req, res) => {
-  res.send("Welcome to Dashboard"); // You'll want to create a dashboard.ejs view
+  res.render("dashboard", { locations});
+});
+
+// GET route - Registration page
+app.get("/registration", (req, res) => {
+  res.render("registration");
 });
 
 app.post("/register", async (req, res) => {
@@ -208,6 +181,26 @@ app.post("/register", async (req, res) => {
       username: req.body.username || "",
     });
   }
+});
+
+// GET route - Want-to-go page
+app.get("/want-to-go", (req, res) => {
+  res.render("want-to-go");
+});
+
+// GET route - Want-to-go page
+app.get("/hiking", (req, res) => {
+  res.render("hiking");
+});
+
+// GET route - Want-to-go page
+app.get("/cities", (req, res) => {
+  res.render("cities");
+});
+
+// GET route - Want-to-go page
+app.get("/islands", (req, res) => {
+  res.render("islands");
 });
 
 // MongoDB connection setup

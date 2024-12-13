@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Destinations</title>
+  <title>Want-to-Go List</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
   <link rel="stylesheet" href="/css/globals.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -29,7 +29,6 @@
       border: 2px solid #0891b2;
     }
 
-    /* Ensure search-btn is visible and properly displayed */
     .search-btn {
       background-color: #0891b2;
       color: white;
@@ -37,8 +36,8 @@
       font-size: 16px;
       border: none;
       border-radius: 0 9999px 9999px 0;
-      visibility: visible; /* Ensure it's not hidden */
-      display: inline-flex; /* Ensure it displays properly */
+      visibility: visible;
+      display: inline-flex;
       justify-content: center;
       align-items: center;
     }
@@ -59,7 +58,7 @@
 
     .category-image {
       width: 100%;
-      height: 300px;
+      height: 200px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 12px;
@@ -78,6 +77,21 @@
       background-color: #0e7490;
     }
 
+    /* Want-to-Go List Section */
+    .want-to-go-list-btn {
+      background-color: #0891b2;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      width: 64%;
+    }
+
+    .want-to-go-list-btn:hover {
+      background-color: #0e7490;
+    }
+
     /* Responsive Grid */
     @media (min-width: 768px) {
       .categories-grid {
@@ -91,42 +105,41 @@
   <!-- Navbar -->
   <%- include('components/Nav') %>
 
-  <!-- Destinations Title -->
-  <div class="container mx-auto mt-28 px-6">
-    <h1 class="text-4xl font-bold text-center text-gray-700 mb-8">Destinations</h1>
+  <!-- Want-to-Go List Title -->
+  <div class="container mx-auto mt-28 px-6 z-50">
+    <h1 class="text-4xl font-bold text-center text-gray-700 mb-8">Want-to-Go List</h1>
   </div>
 
-  <!-- Categories Section -->
-  <div class="container mx-auto px-6 grid grid-cols-1 gap-8 sm:grid-cols-3">
-    <!-- Hiking Category -->
-    <div class="category-card text-center">
-      <img src="/hiking.png" alt="Hiking" class="category-image">
-      <h2 class="text-xl font-semibold text-gray-800 mb-2">Hiking</h2>
-      <button onclick="location.href = '/hiking';" class="view-btn">View</button>
-    </div>
-
-    <!-- Cities Category -->
-    <div class="category-card text-center">
-      <img src="/cities.png" alt="Cities" class="category-image">
-      <h2 class="text-xl font-semibold text-gray-800 mb-2">Cities</h2>
-      <button onclick="location.href = '/cities';" class="view-btn">View</button>
-    </div>
-
-    <!-- Islands Category -->
-    <div class="category-card text-center">
-      <img src="/islands.png" alt="Islands" class="category-image">
-      <h2 class="text-xl font-semibold text-gray-800 mb-2">Islands</h2>
-      <button onclick="location.href = '/islands';" class="view-btn">View</button>
-    </div>
+  <!-- List of Places (Dummy Data) -->
+  <div class="container mx-auto px-6 grid grid-cols-1 gap-8 sm:grid-cols-4">
+    <!-- Dummy Array of Places -->
+    <% 
+      const places = [
+        { id: 1, name: "Tokyo", description: "The Capital of Japan", image: "/tokyo.jpg" },
+        { id: 2, name: "New York", description: "The Big Apple", image: "/newyork.jpg" },
+        { id: 3, name: "London", description: "The Capital of England", image: "/london.jpg" },
+        { id: 4, name: "Sydney", description: "Famous for the Opera House", image: "/sydney.jpg" }
+      ];
+    %>
+    
+    <% if (places.length === 0) { %>
+      <p class="text-center text-gray-600 text-xl">Your Want-to-Go list is empty. Add some places!</p>
+    <% } else { %>
+      <% places.forEach(place => { %>
+        <div class="category-card text-center">
+          <img src="<%= place.image %>" alt="<%= place.name %>" class="category-image">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2"><%= place.name %></h2>
+          <p class="text-gray-600 mb-4"><%= place.description %></p>
+          <a href="/location/<%= place.id %>" class="view-btn">View</a>
+        </div>
+      <% }) %>
+    <% } %>
   </div>
 
-  <!-- Want-to-Go List -->
-  <div class="container mx-auto px-6 mt-12 text-center flex flex-col justify-between items-center gap-4">
-    <a href='/want-to-go' class="view-btn w-64 mx-auto">
-      Want-to-Go List
-    </a>
-    <a href='/dashboard' class="view-btn w-64 mx-auto">
-      To the dashboard
+  <!-- Actions -->
+  <div class="container mx-auto px-6 mt-12 text-center flex flex-col justify-between items-center gap-4 z-50">
+    <a href="/dashboard" class="want-to-go-list-btn">
+      Go to Dashboard
     </a>
   </div>
 

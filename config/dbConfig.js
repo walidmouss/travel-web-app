@@ -1,3 +1,4 @@
+// IF YOU MOVE THIS FILE ANYWHERE ELSE, I WILL FRY YOU LIKE A FISH 🐟
 const { MongoClient } = require('mongodb');
 
 async function connectToDatabase() {

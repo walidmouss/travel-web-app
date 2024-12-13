@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= name %></title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Navbar Styling */
+    .navbar {
+      z-index: 10; /* This will ensure the navbar stays on top */
+    }
+
+    .category-card, .view-btn, .location-wish-btn {
+      position: relative;
+      z-index: 20; /* Ensure buttons and cards stay above the background blobs */
+    }
+
+    .navbar-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.75rem;
+      color: #2C3E50;
+    }
+
+    .search-input {
+      border: 2px solid #0891b2;
+    }
+
+    /* Ensure search-btn is visible and properly displayed */
+    .search-btn {
+      background-color: #0891b2;
+      color: white;
+      padding: 0 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 0 9999px 9999px 0;
+      visibility: visible; /* Ensure it's not hidden */
+      display: inline-flex; /* Ensure it displays properly */
+      justify-content: center;
+      align-items: center;
+    }
+
+    .location-search-bar {
+      max-width: 350px;
+      height: 42px;
+      border-radius: 9999px; /* Makes the search bar rounded */
+      overflow: hidden;
+    }
+
+    .location-input {
+      width: 100%;
+      padding: 0 12px;
+      height: 100%;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .location__search { 
+      background-color: #0891b2;
+      color: white;
+    }
+
+    .location-wish-btn {
+      background-color: #0891b2;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .location-wish-btn:hover {
+      background-color: #0e7490;
+    }
+
+    /* Image and Content Section */
+    .image-container img {
+      width: 500px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .content h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #2C3E50;
+    }
+
+    .content p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Responsive Layout */
+    @media (max-width: 768px) {
+      .image-container img {
+        width: 100%;
+        height: auto;
+      }
+
+      .content h1 {
+        text-align: center;
+      }
+
+      .location-search-bar {
+        margin-top: 12px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-100 flex flex-col">
+  <!-- Navbar -->
+  <%- include('components/Nav') %>
+
+  <!-- Main Content -->
+  <div class="container mx-auto mt-28 px-6 grid grid-cols-1 sm:grid-cols-2 gap-12 items-start">
+    <!-- Left: Image -->
+    <div class="image-container">
+      <img src="<%= image %>" alt="Image of <%= name %>">
+    </div>
+
+    <!-- Right: Title and Description -->
+    <div class="content flex flex-col justify-between items-start gap-4">
+      <h1 class="font-bold text-xl"><%= name %></h1>
+      <p><%= description %></p>
+      <button id="want-to-go" class="location-wish-btn z-10">
+        Add to Want-to-Go List
+      </button>
+    </div>
+  </div>
+
+  <!-- Video Section -->
+  <div class="container mx-auto mt-12 px-6">
+    <video controls class="rounded-lg shadow-lg w-full">
+      <source src="<%= video %>" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- Background blob effect -->
+  <div class="portal__form--bg absolute inset-0 z-0">
+    <div class="portal__form--bg-gradient-1 absolute inset-0 z-0"></div>
+    <div class="portal__form--bg-gradient-2 absolute inset-0 z-0"></div>
+  </div>
+</body>
+
+</html>

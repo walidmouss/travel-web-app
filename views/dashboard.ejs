@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nomads.com Dashboard</title>
+    <link rel="stylesheet" href="/css/globals.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
+    />
+  </head>
+  <body>
+    <div>
+      <div class="relative z-10">
+        <div class="mx -auto py-6 sm:px-6 lg:px-8">
+          <div class="bg-white shadow overflow-hidden sm:rounded-xl">
+            <div class="dashboard__title px-4 py-5 sm:px-6">
+              <h2 class="dashboard__title text-lg leading-6 font-medium text-white font-bold text-xl">
+                Nomads Dashboard
+              </h2>
+            </div>
+            <div class="border-t border-gray-200">
+              <dl>
+                <div
+                  class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                >
+                  <dt class="text-lg font-medium text-gray-500">
+                    Featured Destination
+                  </dt>
+                  <a href="/islands/santorini" class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <div class="relative h-64 rounded-lg overflow-hidden">
+                      <img
+                        src="/santorini.png"
+                        alt="Santorini, Greece"
+                        class="w-full h-full object-cover"
+                      />
+                      <div
+                        class="absolute inset-0 bg-gray-900 bg-opacity-50 flex flex-col items-center justify-center"
+                      >
+                        <h3 class="text-white text-2xl font-bold">
+                          Santorini, Greece
+                        </h3>
+                        <p class="text-white text-lg">$2,875/mo</p>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+                <div
+                  class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6"
+                >
+                  <dt class="text-lg font-medium text-gray-500">Locations</dt>
+                  <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <div
+                      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                    >
+                      <% locations.forEach(location => { %> <%-
+                      include('components/LocationCard', location) %> <% }); %>
+                    </div>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="portal__form--bg absolute inset-0 z-0">
+        <div class="portal__form--bg-gradient-1 absolute inset-0 z-0"></div>
+        <div class="portal__form--bg-gradient-2 absolute inset-0 z-0"></div>
+      </div>
+    </div>
+  </body>
+</html>
