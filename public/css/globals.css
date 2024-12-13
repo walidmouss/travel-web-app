@@ -33,7 +33,7 @@ body {
   line-height: 1.5;
 }
 
-.container {
+.kontainer {
   width: 100%;
   padding: 2rem;
   position: relative;
@@ -176,6 +176,37 @@ input[type="submit"]:active {
   padding: 2rem;
   position: relative;
   overflow: hidden;
+}
+
+.portal__form--expanded {
+  width: 100%;
+  flex: 1;
+  position: relative;
+  z-index: 10;
+}
+
+.portal__form--bg {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1), rgba(99, 102, 241, 0.1));
+  backdrop-filter: blur(20px);
+}
+
+.portal__form--bg-gradient-1 {
+  background: radial-gradient(circle at center, 
+    rgba(37, 99, 235, 0.1) 0%,
+    rgba(99, 102, 241, 0.05) 40%,
+    rgba(147, 51, 234, 0.05) 60%,
+    rgba(192, 38, 211, 0.02) 100%
+  );
+  animation: rotate 20s linear infinite;
+}
+
+.portal__form--bg-gradient-2 {
+  background: radial-gradient(circle at center,
+    rgba(59, 130, 246, 0.08) 0%,
+    rgba(37, 99, 235, 0.06) 45%,
+    rgba(99, 102, 241, 0.04) 100%
+  );
+  animation: pulse 8s ease-in-out infinite;
 }
 
 /* New decorative background elements */
@@ -322,7 +353,7 @@ a:hover {
     font-size: 1.5rem;
   }
   
-  .container {
+  .kontainer {
     padding: 1rem;
   }
   
