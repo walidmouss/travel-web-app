@@ -188,6 +188,21 @@ app.get("/want-to-go", (req, res) => {
   res.render("want-to-go");
 });
 
+// GET route - Want-to-go page
+app.get("/hiking", (req, res) => {
+  res.render("hiking");
+});
+
+// GET route - Want-to-go page
+app.get("/cities", (req, res) => {
+  res.render("cities");
+});
+
+// GET route - Want-to-go page
+app.get("/islands", (req, res) => {
+  res.render("islands");
+});
+
 // MongoDB connection setup
 connectToDatabase()
   .then((client) => {
