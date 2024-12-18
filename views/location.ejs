@@ -152,9 +152,13 @@
     </div>
   </div>
 
-  <!-- Video Section -->
-  <div class="container mx-auto mt-12 px-6">
-  </div>
+  <!-- Display success or error message -->
+  <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+    <div class="success__message"><%= successMessage %></div> 
+  <% } %> 
+  <% if (typeof errorMessage !== 'undefined' && errorMessage) { %> 
+    <div class="error__message"><%= errorMessage %></div> 
+  <% } %>
 
   <!-- Background blob effect -->
   <div class="portal__form--bg absolute inset-0 z-0">

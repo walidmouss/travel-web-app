@@ -345,6 +345,23 @@ input[type="submit"]:active {
   }
 }
 
+.success__message {
+  width: 100%;
+  color: #15803d; /* Dark green */
+  background-color: #dcfce7; /* Light green background */
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #bbf7d0; /* Light green border */
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  animation: slideIn 0.3s ease-out;
+}
+
 .error__message {
   width: 100%;
   color: var(--error);
