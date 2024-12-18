@@ -114,7 +114,7 @@ app.post("/login", async (req, res) => {
     req.session.userId = user._id;
     req.session.email = user.email;
 
-    res.redirect("/dashboard");
+    res.redirect("/home");
   } catch (error) {
     logger.errorLog("Login error:", error);
     res.render("login", {
