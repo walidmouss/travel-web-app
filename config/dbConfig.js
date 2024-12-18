@@ -15,16 +15,15 @@ async function connectToDatabase() {
 
     // Hard-coded user document
     const hardcodedUser = {
-      "_id": new ObjectId(), // Generate a new ObjectId
+      "_id": new ObjectId(),
       "email": "hatemthedev@gmail.com",
       "password": "123456789Aa",
       "wantToGoList": []
     };
 
-    // Query to check if the user already exists in the collection
+    // Query to check if the user already exists
     const existingUser = await usersCollection.findOne({ email: hardcodedUser.email });
 
-    // Check if user already exists to avoid duplicates
     if (!existingUser) {
       console.log("Inserting hardcoded user:", hardcodedUser);
       const result = await usersCollection.insertOne(hardcodedUser);
@@ -33,7 +32,8 @@ async function connectToDatabase() {
       console.log("Hardcoded user already exists:", existingUser);
     }
 
-    return client;
+    // Return both client and database
+    return { client, database };
   } catch (err) {
     console.error("Failed to connect to MongoDB", err);
     throw err;

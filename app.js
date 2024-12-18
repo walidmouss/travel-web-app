@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const bcrypt = require('bcrypt');
 const connectToDatabase = require("./config/dbConfig");
 const logger = require("./lib/logger");
 const { locations } = require("./constants");
@@ -11,24 +12,51 @@ const PORT = process.env.PORT || 3001;
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+// Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Global database connection
-let db;
+// Database middleware - will be initialized after connection
+app.use((req, res, next) => {
+  if (!app.locals.db) {
+    return res.status(500).json({ error: "Database not connected yet. Please try again later." });
+  }
+  req.db = app.locals.db; // Make db available in route handlers
+  next();
+});
 
-// GET route - Display login page
+// Application startup function that ensures database connection before server start
+async function startApplication() {
+  try {
+    // Connect to database first
+    const { client, database } = await connectToDatabase();
+    logger.log("MongoDB connection established");
+    
+    // Store database connection in app.locals for global access
+    app.locals.db = database;
+    
+    // Start server only after successful database connection
+    startServer(PORT);
+  } catch (err) {
+    logger.errorLog("Failed to start application:", err);
+    process.exit(1);
+  }
+}
+
+// Routes
 app.get("/", (req, res) => {
+  res.redirect("/login");
+});
+
+app.get("/login", (req, res) => {
   res.render("login", { error: null, email: "", showRegistrationLink: false });
 });
 
-// POST route - Handle login
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Input validation
     if (!email || !password) {
       return res.render("login", {
         error: "Please provide both email and password",
@@ -37,7 +65,6 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.render("login", {
@@ -47,8 +74,7 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    // Find user in database
-    const user = await db.collection("users").findOne({
+    const user = await req.db.collection("users").findOne({
       email: email.toLowerCase(),
     });
 
@@ -60,7 +86,6 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    // Simple password comparison (not secure for production)
     if (password !== user.password) {
       return res.render("login", {
         error: "Incorrect password. Please try again.",
@@ -69,7 +94,6 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    // Successful login
     res.redirect("/dashboard");
   } catch (error) {
     logger.errorLog("Login error:", error);
@@ -81,30 +105,15 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Add this route to handle GET requests to /login
-app.get("/login", (req, res) => {
-  res.render("login", { error: null, email: "", showRegistrationLink: false });
-});
-
-// Keep your existing root route as a redirect to /login
-app.get("/", (req, res) => {
-  res.redirect("/login");
-});
-
-// GET route - Homepage after login
 app.get("/home", (req, res) => {
   console.log("GET /home route hit");
   res.render("home");
 });
 
-// Dynamic route to handle all location pages
 app.get("/:category/:location", (req, res) => {
   const { category, location } = req.params;
-
-  // Find the location data from the locations array
-  const locationData = locations.find(loc => loc.url === `/${category}/${location}`)
-
-  // Ensure the location exists in locationData
+  const locationData = locations.find(loc => loc.url === `/${category}/${location}`);
+  
   if (locationData) {
     res.render('location', locationData);
   } else {
@@ -112,16 +121,9 @@ app.get("/:category/:location", (req, res) => {
   }
 });
 
-
-///////////////////////// POST route for search ^_^ (25%)///////////////////////////////
-
 app.post("/search", (req, res) => {
-  // Check for search term in both req.body and req.query
   const searchTerm = req.body.Search || req.body.search || req.query.search || '';
   
-  console.log("Search term received:", searchTerm);
-
-  // If no search term, redirect back to home or render an error page
   if (!searchTerm) {
     return res.render('searchedStuff', { 
       results: [], 
@@ -129,81 +131,63 @@ app.post("/search", (req, res) => {
     });
   }
 
-  // Filter locations based on the search term (case-insensitive)
   const results = locations.filter((location) => {
     return location.name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // Render search results page
   res.render('searchedStuff', { 
     results: results,
-    searchTerm: searchTerm // Pass search term back to the view
+    searchTerm: searchTerm
   });
 });
 
-// Add a GET route for search to handle URL parameters
 app.get("/search", (req, res) => {
   const searchTerm = req.query.search || '';
-  
-  console.log("Search term from URL:", searchTerm);
-
-  // Filter locations based on the search term (case-insensitive)
   const results = locations.filter((location) => {
     return location.name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // Render search results page
   res.render('searchedStuff', { 
     results: results,
-    searchTerm: searchTerm // Pass search term back to the view
+    searchTerm: searchTerm
   });
 });
 
-// Easter Egg
 app.get("/helloKitty", (req, res) => {
   res.render("rome");
-})
-
-// GET route - Dashboard (just as an example)
-app.get("/dashboard", (req, res) => {
-  res.render("dashboard", { locations});
 });
 
-// GET route - Registration page
+app.get("/dashboard", (req, res) => {
+  res.render("dashboard", { locations });
+});
+
 app.get("/registration", (req, res) => {
   res.render("registration");
 });
 
-// POST route - Handle registration
 app.post("/registration", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validate input
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required." });
     }
 
-    // Connect to the database and users collection
-    await client.connect();
-    const database = client.db(dbName);
-    const usersCollection = database.collection("users");
-
-    // Check if the user already exists
+    const usersCollection = req.db.collection("users");
     const existingUser = await usersCollection.findOne({ email });
+    
     if (existingUser) {
       return res.status(400).json({ message: "This user is already registered." });
     }
 
-    // Insert the new user
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = {
       email,
-      password, // Note: Passwords should be hashed in production
-      wantToGoList: [] // Default empty list
+      password: hashedPassword,
+      wantToGoList: []
     };
 
     const result = await usersCollection.insertOne(newUser);
-
     res.status(201).json({
       message: "User registered successfully.",
       userId: result.insertedId
@@ -214,37 +198,23 @@ app.post("/registration", async (req, res) => {
   }
 });
 
-// GET route - Want-to-go page
 app.get("/want-to-go", (req, res) => {
   res.render("want-to-go");
 });
 
-// GET route - Want-to-go page
 app.get("/hiking", (req, res) => {
   res.render("hiking");
 });
 
-// GET route - Want-to-go page
 app.get("/cities", (req, res) => {
   res.render("cities");
 });
 
-// GET route - Want-to-go page
 app.get("/islands", (req, res) => {
   res.render("islands");
 });
 
-// MongoDB connection setup
-connectToDatabase()
-  .then((client) => {
-    logger.log("MongoDB connection established");
-    db = client.db("travel-web-app"); // Store the database connection
-  })
-  .catch((err) => {
-    logger.errorLog("MongoDB connection failed");
-  });
-
-// Start server with a dynamic port checker
+// Server startup function with port checking
 function startServer(port) {
   app
     .listen(port, () => {
@@ -261,4 +231,5 @@ function startServer(port) {
     });
 }
 
-startServer(PORT);
+// Start the application
+startApplication();
