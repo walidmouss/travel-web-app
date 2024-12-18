@@ -219,9 +219,18 @@ app.get("/registration", (req, res) => {
   res.render("registration", { error: null, email: "" });
 });
 
-app.get("/want-to-go", (req, res) => {
-  res.render("want-to-go");
+app.get("/want-to-go", async (req, res) => {
+  // Fetch the user's want-to-go list from the database
+  const user = await req.db.collection("users").findOne({ email: req.session.email });
+
+  if (!user) {
+    return res.redirect("/login");
+  }
+
+  // Render the 'want-to-go' page with the user's want-to-go list
+  res.render("want-to-go", { places: user.wantToGoList });
 });
+
 
 app.get("/hiking", (req, res) => {
   res.render("hiking");
