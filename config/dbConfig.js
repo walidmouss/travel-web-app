@@ -9,7 +9,8 @@ async function connectToDatabase() {
     console.log("Connected to MongoDB");
 
     // Select the database and collection
-    const database = client.db("travel-web-app"); // Replace with your actual database name
+    const database = client.db("travel-web-app");
+    console.log("Connected to database:", database.databaseName);
     const usersCollection = database.collection("users");
 
     // Hard-coded user document
@@ -21,14 +22,16 @@ async function connectToDatabase() {
       "wantToGoList": []
     };
 
-    // Check if user already exists to avoid duplicates
+    // Query to check if the user already exists in the collection
     const existingUser = await usersCollection.findOne({ email: hardcodedUser.email });
+
+    // Check if user already exists to avoid duplicates
     if (!existingUser) {
-      // Insert the hard-coded user
+      console.log("Inserting hardcoded user:", hardcodedUser);
       const result = await usersCollection.insertOne(hardcodedUser);
-      console.log(`Hard-coded user inserted with ID: ${result.insertedId}`);
+      console.log(`Hardcoded user inserted with ID: ${result.insertedId}`);
     } else {
-      console.log("Hard-coded user already exists");
+      console.log("Hardcoded user already exists:", existingUser);
     }
 
     return client;

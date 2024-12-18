@@ -238,7 +238,7 @@ app.get("/islands", (req, res) => {
 connectToDatabase()
   .then((client) => {
     logger.log("MongoDB connection established");
-    db = client.db("yourDatabaseName"); // Store the database connection
+    db = client.db("travel-web-app"); // Store the database connection
   })
   .catch((err) => {
     logger.errorLog("MongoDB connection failed");
