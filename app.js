@@ -174,43 +174,43 @@ app.get("/registration", (req, res) => {
   res.render("registration");
 });
 
-app.post("/register", async (req, res) => {
+// POST route - Handle registration
+app.post("/registration", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    // Input validation (add more as needed)
-    if (!username || !password) {
-      return res.render("registration", {
-        error: "Please provide both username and password",
-        username: username || "", // Keep the entered username
-      });
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required." });
     }
 
-    // Check if user already exists
-    const existingUser = await db.collection("users").findOne({ username });
+    // Connect to the database and users collection
+    await client.connect();
+    const database = client.db(dbName);
+    const usersCollection = database.collection("users");
+
+    // Check if the user already exists
+    const existingUser = await usersCollection.findOne({ email });
     if (existingUser) {
-      return res.render("registration", {
-        error: "Username already exists",
-        username: username || "",
-      });
+      return res.status(400).json({ message: "This user is already registered." });
     }
 
-    // Hash the password (important for security - use bcrypt or similar in production)
-    const hashedPassword = password; // Replace with actual hashing
+    // Insert the new user
+    const newUser = {
+      email,
+      password, // Note: Passwords should be hashed in production
+      wantToGoList: [] // Default empty list
+    };
 
-    // Insert the new user into the database
-    await db
-      .collection("users")
-      .insertOne({ username, password: hashedPassword });
+    const result = await usersCollection.insertOne(newUser);
 
-    // Redirect to login page or dashboard after successful registration
-    res.redirect("/");
-  } catch (error) {
-    logger.errorLog("Registration error:", error);
-    res.render("registration", {
-      error: "An unexpected error occurred. Please try again later.",
-      username: req.body.username || "",
+    res.status(201).json({
+      message: "User registered successfully.",
+      userId: result.insertedId
     });
+  } catch (err) {
+    console.error("Error registering user:", err);
+    res.status(500).json({ message: "Internal server error." });
   }
 });
 

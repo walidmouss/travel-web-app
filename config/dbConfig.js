@@ -16,9 +16,8 @@ async function connectToDatabase() {
     // Hard-coded user document
     const hardcodedUser = {
       "_id": new ObjectId(), // Generate a new ObjectId
-      "username": "h4temsoliman",
       "email": "hatemthedev@gmail.com",
-      "password": "123456789Aa", // Note: In a real app, NEVER store plain text passwords
+      "password": "123456789Aa",
       "wantToGoList": []
     };
 
