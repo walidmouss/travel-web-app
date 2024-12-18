@@ -29,34 +29,34 @@ const ansiColors = {
 const places = [
   { 
     name: "annapuna", 
-    url: "/hiking/annapuna" 
+    locationUrl: "/hiking/annapuna" 
   },
   { 
     name: "bali", 
-    url: "/islands/bali" 
+    locationUrl: "/islands/bali" 
   },
   { 
     name: "inca", 
-    url: "/hiking/inca" 
+    locationUrl: "/hiking/inca" 
   },
   { 
     name: "paris", 
-    url: "/cities/paris" 
+    locationUrl: "/cities/paris" 
   },
   { 
     name: "rome", 
-    url: "/cities/rome" 
+    locationUrl: "/cities/rome" 
   },
   { 
     name: "santorini", 
-    url: "/islands/santorini" 
+    locationUrl: "/islands/santorini" 
   },
 ];
 
 const locations = [
   {
     name: 'Annapurna',
-    url: '/hiking/annapurna',
+    locationUrl: '/hiking/annapurna',
     image: '/annapurna.png',
     price: '$1,139/mo',
     background: '/background_annapurna.jpg',
@@ -65,7 +65,7 @@ const locations = [
   },
   {
     name: 'Bali',
-    url: '/islands/bali',
+    locationUrl: '/islands/bali',
     image: '/bali.png',
     price: '$1,139/mo',
     background: '/background_bali.jpg',
@@ -74,7 +74,7 @@ const locations = [
   },
   {
     name: 'Inca',
-    url: '/hiking/inca',
+    locationUrl: '/hiking/inca',
     image: '/inca.png',
     price: '$1,139/mo',
     background: '/background_inca.jpg',
@@ -83,7 +83,7 @@ const locations = [
   },
   {
     name: 'Paris',
-    url: '/cities/paris',
+    locationUrl: '/cities/paris',
     image: '/paris.png',
     price: '$1,139/mo',
     background: '/background_paris.jpg',
@@ -92,7 +92,7 @@ const locations = [
   },
   {
     name: 'Rome',
-    url: '/cities/rome',
+    locationUrl: '/cities/rome',
     image: '/rome.png',
     price: '$1,139/mo',
     background: '/background_rome.jpg',
@@ -101,7 +101,7 @@ const locations = [
   },
   {
     name: 'Santorini',
-    url: '/islands/santorini',
+    locationUrl: '/islands/santorini',
     image: '/santorini.png',
     price: '$2,875/mo',
     background: '/background3.jpg',

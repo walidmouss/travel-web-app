@@ -117,10 +117,9 @@
     <% } else { %>
       <% places.forEach(place => { %>
         <div class="category-card text-center">
-          <img src="<%= place.image %>" alt="<%= place.name %>" class="category-image">
-          <h2 class="text-xl font-semibold text-gray-800 mb-2"><%= place.name %></h2>
-          <p class="text-gray-600 mb-4"><%= place.description %></p>
-          <a href="/<%= place.category %>/<%= place.url %>" class="view-btn">View</a>
+          <img src="<%= place.image %>" alt="<%= place.locationName %>" class="category-image">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2"><%= place.locationName %></h2>
+          <a href="<%= place.locationUrl %>" class="view-btn">View</a>
         </div>
       <% }) %>
     <% } %>

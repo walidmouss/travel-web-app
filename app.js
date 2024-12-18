@@ -132,7 +132,7 @@ app.get("/home", checkAuthentication, (req, res) => {
 
 app.get("/:category/:location", checkAuthentication, (req, res) => {
   const { category, location } = req.params;
-  const locationData = locations.find(loc => loc.url === `/${category}/${location}`);
+  const locationData = locations.find(loc => loc.locationUrl === `/${category}/${location}`);
   
   if (locationData) {
     res.render('location', locationData);
@@ -232,7 +232,6 @@ app.get("/registration", (req, res) => {
 });
 
 app.get("/want-to-go", checkAuthentication, async (req, res) => {
-  // Fetch the user's want-to-go list from the database
   const user = await req.db.collection("users").findOne({ email: req.session.email });
 
   if (!user) {
@@ -243,39 +242,39 @@ app.get("/want-to-go", checkAuthentication, async (req, res) => {
   res.render("want-to-go", { places: user.wantToGoList });
 });
 
+
 app.post("/add-to-want-to-go", checkAuthentication, async (req, res) => {
-  const { locationName } = req.body;
+  const { locationName, image, description, video, locationUrl } = req.body;
   const userEmail = req.session.email;
 
   try {
-    // Find the user by email
     const user = await req.db.collection("users").findOne({ email: userEmail });
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    // Check if the location is already in the want-to-go list
-    if (user.wantToGoList.includes(locationName)) {
+    if (user.wantToGoList.some(place => place.locationName === locationName)) {
       return res.render("location", {
         name: locationName,
-        image: req.body.image,
-        description: req.body.description,
-        video: req.body.video,
+        image,
+        description,
+        video,
+        locationUrl,
         errorMessage: "This location is already in your want-to-go list."
       });
     }
 
-    // Add the location to the want-to-go list
     await req.db.collection("users").updateOne(
       { email: userEmail },
-      { $push: { wantToGoList: locationName } }
+      { $push: { wantToGoList: { locationName, image, description, video, locationUrl } } }
     );
 
     res.render("location", {
       name: locationName,
-      image: req.body.image,
-      description: req.body.description,
-      video: req.body.video,
+      image,
+      description,
+      video,
+      locationUrl,
       successMessage: "Location added to your want-to-go list successfully."
     });
   } catch (err) {
@@ -283,7 +282,6 @@ app.post("/add-to-want-to-go", checkAuthentication, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 app.get("/hiking", checkAuthentication, (req, res) => {
   res.render("hiking");
