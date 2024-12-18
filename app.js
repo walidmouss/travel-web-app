@@ -116,26 +116,47 @@ app.get("/:category/:location", (req, res) => {
 ///////////////////////// POST route for search ^_^ (25%)///////////////////////////////
 
 app.post("/search", (req, res) => {
-  const { Search } = req.body;
-  console.log(req.body);
+  // Check for search term in both req.body and req.query
+  const searchTerm = req.body.Search || req.body.search || req.query.search || '';
+  
+  console.log("Search term received:", searchTerm);
 
-  // if there is no input data output an error
-  if (!Search) {
-    return res.status(400).json({ error: "Search term is missing" });
+  // If no search term, redirect back to home or render an error page
+  if (!searchTerm) {
+    return res.render('searchedStuff', { 
+      results: [], 
+      error: "Please enter a search term" 
+    });
   }
 
-  // Filter locations based on the search term
-  const out = locations.filter((location) => {
-    return location.name.toLowerCase().includes(Search.toLowerCase());
+  // Filter locations based on the search term (case-insensitive)
+  const results = locations.filter((location) => {
+    return location.name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // Check if a location is found and render the page or send a JSON response
-  if (out.length > 0) {
-    return res.render('searchedStuff', { results: out }); // Render searchedStuff.ejs with the results
-  }
+  // Render search results page
+  res.render('searchedStuff', { 
+    results: results,
+    searchTerm: searchTerm // Pass search term back to the view
+  });
+});
 
-  // If no results are found, send an error response
-  return res.status(404).json({ error: "No matching locations found" });
+// Add a GET route for search to handle URL parameters
+app.get("/search", (req, res) => {
+  const searchTerm = req.query.search || '';
+  
+  console.log("Search term from URL:", searchTerm);
+
+  // Filter locations based on the search term (case-insensitive)
+  const results = locations.filter((location) => {
+    return location.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  // Render search results page
+  res.render('searchedStuff', { 
+    results: results,
+    searchTerm: searchTerm // Pass search term back to the view
+  });
 });
 
 // Easter Egg

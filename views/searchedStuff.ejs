@@ -89,7 +89,12 @@
 
     <!-- Results Section -->
     <div class="results-container">
-      <h2>Search Results</h2>
+      <% if (searchTerm) { %>
+        <h2>Search Results for "<%= searchTerm %>"</h2>
+      <% } else { %>
+        <h2>Search Results</h2>
+      <% } %>
+
       <% if (results && results.length > 0) { %>
         <ul class="list-unstyled">
           <% results.forEach(location => { %>
@@ -101,7 +106,13 @@
           <% }) %>
         </ul>
       <% } else { %>
-        <p class="text-center">No locations found matching your search.</p>
+        <p class="text-center">
+          <% if (searchTerm) { %>
+            No locations found matching "<%= searchTerm %>".
+          <% } else { %>
+            No search results to display.
+          <% } %>
+        </p>
       <% } %>
     </div>
 
