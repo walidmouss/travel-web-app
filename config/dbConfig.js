@@ -1,4 +1,24 @@
+/**
+ * This file is responsible for connecting to the MongoDB database.
+ * It also creates a unique index on the email field of the users collection.
+ * If the collection is empty, it creates a hardcoded user with the email "
+ * 
+ * @module config/dbConfig
+ * @requires mongodb
+ * @requires bcrypt
+ * @requires constants/index
+ * @returns {Object} The MongoDB client and database objects
+ * @throws {Error} If the connection to MongoDB fails
+ * @throws {Error} If the hardcoded user cannot be created
+ * --------------------------------------------------------------
+ * Hardcoded user email: hatemthedev@gmail.com
+ * Hardcoded user password: 123456789Aa
+ * --------------------------------------------------------------
+ */
+
+
 const { MongoClient, ObjectId } = require('mongodb');
+const bcrypt = require('bcrypt');
 
 async function connectToDatabase() {
   const uri = "mongodb://localhost:27017";
@@ -17,9 +37,10 @@ async function connectToDatabase() {
     // Only try to create the hardcoded user if the collection is empty
     const userCount = await database.collection("users").countDocuments();
     if (userCount === 0) {
+      const hashedPassword = await bcrypt.hash("123456789Aa", 10); // Hash the password
       const hardcodedUser = {
         email: "hatemthedev@gmail.com",
-        password: "123456789Aa",
+        password: hashedPassword,
         wantToGoList: []
       };
 
