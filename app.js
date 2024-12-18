@@ -161,23 +161,25 @@ app.get("/dashboard", (req, res) => {
   res.render("dashboard", { locations });
 });
 
-app.get("/registration", (req, res) => {
-  res.render("registration");
-});
-
 app.post("/registration", async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required." });
+      return res.render("registration", { 
+        error: "Email and password are required.",
+        email: email || ""
+      });
     }
 
     const usersCollection = req.db.collection("users");
     const existingUser = await usersCollection.findOne({ email });
     
     if (existingUser) {
-      return res.status(400).json({ message: "This user is already registered." });
+      return res.render("registration", {
+        error: "This user is already registered.",
+        email: email
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -187,15 +189,26 @@ app.post("/registration", async (req, res) => {
       wantToGoList: []
     };
 
-    const result = await usersCollection.insertOne(newUser);
-    res.status(201).json({
-      message: "User registered successfully.",
-      userId: result.insertedId
+    await usersCollection.insertOne(newUser);
+    
+    // Redirect to login page with success message
+    res.render("login", {
+      error: "Registration successful! Please login with your credentials.",
+      email: email,
+      showRegistrationLink: false
     });
   } catch (err) {
     console.error("Error registering user:", err);
-    res.status(500).json({ message: "Internal server error." });
+    res.render("registration", {
+      error: "An unexpected error occurred. Please try again later.",
+      email: req.body.email || ""
+    });
   }
+});
+
+// Update the GET route to handle error display
+app.get("/registration", (req, res) => {
+  res.render("registration", { error: null, email: "" });
 });
 
 app.get("/want-to-go", (req, res) => {
