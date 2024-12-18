@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Results</title>
+    <!-- Bootstrap CSS for clean styling -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        background-image: url("background3.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+      h1, h2 {
+        text-align: center;
+        -webkit-text-stroke: 1px blue;
+      }
+      .results-container {
+        margin: 50px auto;
+        padding: 20px;
+        max-width: 800px;
+        background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      .result-item {
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: #333;
+        border: 1px solid #555;
+        border-radius: 5px;
+        transition: transform 0.2s ease-in-out;
+      }
+      .result-item:hover {
+        transform: scale(1.02);
+        background-color: #444;
+      }
+      .result-item a {
+        color: rgb(191, 255, 161);
+        font-size: 1.1rem;
+        text-decoration: none;
+      }
+      .result-item a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/home" style="color: rgb(191, 255, 161)">
+        MyEgypt
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto"></ul>
+        <form method="POST" action="/search" class="form-inline my-2 my-lg-0">
+          <input
+            class="form-control mr-sm-2"
+            name="Search"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
+    </nav>
+
+    <!-- Results Section -->
+    <div class="results-container">
+      <h2>Search Results</h2>
+      <% if (results && results.length > 0) { %>
+        <ul class="list-unstyled">
+          <% results.forEach(location => { %>
+            <li class="result-item">
+              <a href="<%= location.url %>">
+                <%= location.name %>
+              </a>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="text-center">No locations found matching your search.</p>
+      <% } %>
+    </div>
+
+    <!-- Optional Bootstrap JS -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

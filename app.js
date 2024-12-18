@@ -118,20 +118,30 @@ app.get("/:category/:location", (req, res) => {
 app.post("/search", (req, res) => {
   const { Search } = req.body;
   console.log(req.body);
+
   // if there is no input data output an error
   if (!Search) {
     return res.status(400).json({ error: "Search term is missing" });
   }
-  //.filter creates a new array that satisfies a certain criteria
-  const out = locations.filter((locations) => {
-    // used the function .tolowercase() to be case insensitive
-    return locations.name.toLowerCase().includes(Search.toLowerCase());
-  });
-  // Respond with the search term and filtered results (out)
-  res.json({ searchTerm: Search, results: out });
 
-  //res.json({find});
+  // Filter locations based on the search term
+  const out = locations.filter((location) => {
+    return location.name.toLowerCase().includes(Search.toLowerCase());
+  });
+
+  // Check if a location is found and render the page or send a JSON response
+  if (out.length > 0) {
+    return res.render('searchedStuff', { results: out }); // Render searchedStuff.ejs with the results
+  }
+
+  // If no results are found, send an error response
+  return res.status(404).json({ error: "No matching locations found" });
 });
+
+// Easter Egg
+app.get("/helloKitty", (req, res) => {
+  res.render("rome");
+})
 
 // GET route - Dashboard (just as an example)
 app.get("/dashboard", (req, res) => {
