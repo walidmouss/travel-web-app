@@ -116,22 +116,53 @@ app.get("/:category/:location", (req, res) => {
 ///////////////////////// POST route for search ^_^ (25%)///////////////////////////////
 
 app.post("/search", (req, res) => {
-  const { Search } = req.body;
-  console.log(req.body);
-  // if there is no input data output an error
-  if (!Search) {
-    return res.status(400).json({ error: "Search term is missing" });
-  }
-  //.filter creates a new array that satisfies a certain criteria
-  const out = locations.filter((locations) => {
-    // used the function .tolowercase() to be case insensitive
-    return locations.name.toLowerCase().includes(Search.toLowerCase());
-  });
-  // Respond with the search term and filtered results (out)
-  res.json({ searchTerm: Search, results: out });
+  // Check for search term in both req.body and req.query
+  const searchTerm = req.body.Search || req.body.search || req.query.search || '';
+  
+  console.log("Search term received:", searchTerm);
 
-  //res.json({find});
+  // If no search term, redirect back to home or render an error page
+  if (!searchTerm) {
+    return res.render('searchedStuff', { 
+      results: [], 
+      error: "Please enter a search term" 
+    });
+  }
+
+  // Filter locations based on the search term (case-insensitive)
+  const results = locations.filter((location) => {
+    return location.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  // Render search results page
+  res.render('searchedStuff', { 
+    results: results,
+    searchTerm: searchTerm // Pass search term back to the view
+  });
 });
+
+// Add a GET route for search to handle URL parameters
+app.get("/search", (req, res) => {
+  const searchTerm = req.query.search || '';
+  
+  console.log("Search term from URL:", searchTerm);
+
+  // Filter locations based on the search term (case-insensitive)
+  const results = locations.filter((location) => {
+    return location.name.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
+  // Render search results page
+  res.render('searchedStuff', { 
+    results: results,
+    searchTerm: searchTerm // Pass search term back to the view
+  });
+});
+
+// Easter Egg
+app.get("/helloKitty", (req, res) => {
+  res.render("rome");
+})
 
 // GET route - Dashboard (just as an example)
 app.get("/dashboard", (req, res) => {
