@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const bcrypt = require('bcrypt');
+const session = require('express-session');
 const connectToDatabase = require("./config/dbConfig");
 const logger = require("./lib/logger");
 const { locations } = require("./constants");
@@ -11,6 +12,12 @@ const PORT = process.env.PORT || 3001;
 // View engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+app.use(session({
+  secret: 'your-secret-key', // In production, use environment variable
+  resave: false,
+  saveUninitialized: false
+}));
 
 // Middleware setup
 app.use(express.json());
@@ -86,7 +93,8 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    if (password !== user.password) {
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
       return res.render("login", {
         error: "Incorrect password. Please try again.",
         email,
@@ -189,14 +197,14 @@ app.post("/registration", async (req, res) => {
       wantToGoList: []
     };
 
-    await usersCollection.insertOne(newUser);
+    const result = await usersCollection.insertOne(newUser);
     
-    // Redirect to login page with success message
-    res.render("login", {
-      error: "Registration successful! Please login with your credentials.",
-      email: email,
-      showRegistrationLink: false
-    });
+    // Set up session for automatic login
+    req.session.userId = result.insertedId;
+    req.session.email = newUser.email;
+
+    // Redirect directly to dashboard
+    res.redirect("/dashboard");
   } catch (err) {
     console.error("Error registering user:", err);
     res.render("registration", {
