@@ -33,6 +33,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Authentication middleware to check if user is authenticated
+function checkAuthentication(req, res, next) {
+  if (req.session.userId) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
 // Application startup function that ensures database connection before server start
 async function startApplication() {
   try {
@@ -102,6 +110,10 @@ app.post("/login", async (req, res) => {
       });
     }
 
+    // Set the session after successful login
+    req.session.userId = user._id;
+    req.session.email = user.email;
+
     res.redirect("/dashboard");
   } catch (error) {
     logger.errorLog("Login error:", error);
@@ -113,12 +125,12 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/home", (req, res) => {
+app.get("/home", checkAuthentication, (req, res) => {
   console.log("GET /home route hit");
   res.render("home");
 });
 
-app.get("/:category/:location", (req, res) => {
+app.get("/:category/:location", checkAuthentication, (req, res) => {
   const { category, location } = req.params;
   const locationData = locations.find(loc => loc.url === `/${category}/${location}`);
   
@@ -129,7 +141,7 @@ app.get("/:category/:location", (req, res) => {
   }
 });
 
-app.post("/search", (req, res) => {
+app.post("/search", checkAuthentication, (req, res) => {
   const searchTerm = req.body.Search || req.body.search || req.query.search || '';
   
   if (!searchTerm) {
@@ -149,7 +161,7 @@ app.post("/search", (req, res) => {
   });
 });
 
-app.get("/search", (req, res) => {
+app.get("/search", checkAuthentication, (req, res) => {
   const searchTerm = req.query.search || '';
   const results = locations.filter((location) => {
     return location.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -161,11 +173,11 @@ app.get("/search", (req, res) => {
   });
 });
 
-app.get("/helloKitty", (req, res) => {
-  res.render("rome");
-});
+// app.get("/helloKitty", (req, res) => {
+//   res.render("rome");
+// });
 
-app.get("/dashboard", (req, res) => {
+app.get("/dashboard", checkAuthentication, (req, res) => {
   res.render("dashboard", { locations });
 });
 
@@ -219,7 +231,7 @@ app.get("/registration", (req, res) => {
   res.render("registration", { error: null, email: "" });
 });
 
-app.get("/want-to-go", async (req, res) => {
+app.get("/want-to-go", checkAuthentication, async (req, res) => {
   // Fetch the user's want-to-go list from the database
   const user = await req.db.collection("users").findOne({ email: req.session.email });
 
@@ -232,15 +244,15 @@ app.get("/want-to-go", async (req, res) => {
 });
 
 
-app.get("/hiking", (req, res) => {
+app.get("/hiking", checkAuthentication, (req, res) => {
   res.render("hiking");
 });
 
-app.get("/cities", (req, res) => {
+app.get("/cities", checkAuthentication, (req, res) => {
   res.render("cities");
 });
 
-app.get("/islands", (req, res) => {
+app.get("/islands", checkAuthentication, (req, res) => {
   res.render("islands");
 });
 
