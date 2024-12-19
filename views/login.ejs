@@ -29,6 +29,9 @@
           <div class="row">
 
             <form action="/login" method="POST">
+              <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+                <div class="success__message"><%= successMessage %></div>
+              <% } %>
               <% if (typeof error !== 'undefined' && error) { %>
                 <div class="error__message"><%= error %></div>
               <% } %>
