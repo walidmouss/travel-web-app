@@ -68,10 +68,44 @@
     .view-btn:hover {
       background-color: #0e7490;
     }
+
+    /* Fixed Card Dimensions */
+  .category-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    height: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Fixed Image Size */
+  .category-image {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+
+  /* Card Content Layout */
+  .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 8px 0;
+  }
   </style>
 </head>
 
-<body class="min-h-screen bg-gray-100 flex flex-col">
+<body class="min-h-screen bg-gray-100 flex flex-col overflow-hidden">
   <!-- Navbar -->
   <%- include('components/Nav') %>
 
@@ -86,27 +120,35 @@
     </h1>
   </div>
 
-  <!-- Results Section -->
-  <div class="container mx-auto px-6 grid grid-cols-1 gap-8 sm:grid-cols-4 z-50">
-    <% if (results && results.length > 0) { %>
-      <% results.forEach(location => { %>
-        <div class="result-card text-center">
-          <img src="<%= location.image %>" alt="<%= location.name %>" class="category-image">
-          <h2 class="text-xl font-semibold text-gray-800 mb-2"><%= location.name %></h2>
-          <a href="<%= location.locationUrl %>" class="view-btn">View Details</a>
-        </div>
-      <% }) %>
-    <% } else { %>
-      <div class="col-span-full text-center">
-        <p class="text-xl text-gray-600">
-          <% if (searchTerm) { %>
-            No locations found matching "<%= searchTerm %>".
-          <% } else { %>
-            No search results to display.
-          <% } %>
-        </p>
+  <!-- Scrollable Container -->
+  <div class="container mx-auto px-6 flex-1 z-50">
+    <div class="bg-white bg-opacity-50 backdrop-blur-sm rounded-2xl shadow-lg p-6 h-96 overflow-y-auto">
+      <!-- Results Grid -->
+      <div class="grid grid-cols-1 gap-8 sm:grid-cols-4">
+        <% if (results && results.length > 0) { %>
+          <% results.forEach(location => { %>
+            <!-- Update the card structure in the results loop -->
+            <div class="category-card">
+              <img src="<%= location.image %>" alt="<%= location.name %>" class="category-image">
+              <div class="card-content">
+                <h2 class="text-xl font-semibold text-gray-800"><%= location.name %></h2>
+                <a href="<%= location.locationUrl %>" class="view-btn">View Details</a>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="col-span-full text-center">
+            <p class="text-xl text-gray-600">
+              <% if (searchTerm) { %>
+                No locations found matching "<%= searchTerm %>".
+              <% } else { %>
+                No search results to display.
+              <% } %>
+            </p>
+          </div>
+        <% } %>
       </div>
-    <% } %>
+    </div>
   </div>
 
   <!-- Background blob effect -->
