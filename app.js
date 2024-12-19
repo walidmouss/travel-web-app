@@ -125,6 +125,28 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Add this after your other routes
+app.post("/logout", async (req, res) => {
+  try {
+    // Destroy session
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        return res.status(500).send("Error logging out");
+      }
+
+      // Clear database connection from request
+      req.db = null;
+
+      // Redirect to login page
+      res.redirect('/login');
+    });
+  } catch (err) {
+    console.error("Logout error:", err);
+    res.status(500).send("Error logging out");
+  }
+});
+
 app.get("/home", checkAuthentication, (req, res) => {
   console.log("GET /home route hit");
   res.render("home");
