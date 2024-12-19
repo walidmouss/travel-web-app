@@ -65,7 +65,16 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login", { error: null, email: "", showRegistrationLink: false });
+  const successMessage = req.session?.successMessage;
+  // Clear the message so it doesn't show again on refresh
+  delete req.session?.successMessage;
+  
+  res.render("login", { 
+    error: null, 
+    email: "", 
+    showRegistrationLink: false,
+    successMessage 
+  });
 });
 
 app.post("/login", async (req, res) => {
@@ -122,6 +131,28 @@ app.post("/login", async (req, res) => {
       email: req.body.email,
       showRegistrationLink: false,
     });
+  }
+});
+
+// Add this after your other routes
+app.post("/logout", async (req, res) => {
+  try {
+    // Destroy session
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        return res.status(500).send("Error logging out");
+      }
+
+      // Clear database connection from request
+      req.db = null;
+
+      // Redirect to login page
+      res.redirect('/login');
+    });
+  } catch (err) {
+    console.error("Logout error:", err);
+    res.status(500).send("Error logging out");
   }
 });
 
@@ -209,14 +240,12 @@ app.post("/registration", async (req, res) => {
       wantToGoList: []
     };
 
-    const result = await usersCollection.insertOne(newUser);
+    await usersCollection.insertOne(newUser);
     
-    // Set up session for automatic login
-    req.session.userId = result.insertedId;
-    req.session.email = newUser.email;
-
-    // Redirect directly to dashboard
-    res.redirect("/dashboard");
+    // Set success message in session
+    req.session.successMessage = "Registration successful! Please login with your credentials.";
+    res.redirect("/login");
+    
   } catch (err) {
     console.error("Error registering user:", err);
     res.render("registration", {
