@@ -216,7 +216,7 @@ app.post("/registration", async (req, res) => {
     req.session.email = newUser.email;
 
     // Redirect directly to dashboard
-    res.redirect("/dashboard");
+    res.redirect("/home");
   } catch (err) {
     console.error("Error registering user:", err);
     res.render("registration", {
