@@ -135,6 +135,15 @@ form {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.no-form-styling {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  border: 0;
+}
+
 a, button {
   cursor: pointer;
 }
@@ -212,6 +221,10 @@ input[type="submit"]:active {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+.search-input {
+  border: 2px solid #0891b2;
 }
 
 .portal__container {
@@ -343,6 +356,23 @@ input[type="submit"]:active {
   50% {
     transform: translate(-50%, -50%) rotate(45deg) scale(1.1);
   }
+}
+
+.success__message {
+  width: 100%;
+  color: #15803d; /* Dark green */
+  background-color: #dcfce7; /* Light green background */
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #bbf7d0; /* Light green border */
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  animation: slideIn 0.3s ease-out;
 }
 
 .error__message {

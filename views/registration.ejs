@@ -12,7 +12,7 @@
     />
     <link rel="stylesheet" href="/css/globals.css" />
     <!-- <link rel="stylesheet" href="/css/registration.css" /> -->
-    <title>MyEgypt | Registration</title>
+    <title>Digital Nomads | Registration</title>
   </head>
 
   <body>
@@ -27,18 +27,18 @@
       <div class="portal__form">
         <div class="kontainer">
           <div class="row">
-            <form method="post" action="/register">
+            <form method="post" action="/registration">
               <% if (typeof error !== 'undefined' && error) { %>
                 <div class="error__message"><%= error %></div>
               <% } %>
               <h1>Create Your Account</h1>
               <div class="form__container">
-                <label class="form__label" for="user">Username</label>
+                <label class="form__label" for="email">Email</label>
                 <input 
-                  type="text" 
-                  id="user" 
-                  name="username"
-                  value="<%= typeof username !== 'undefined' ? username : '' %>"
+                  type="email" 
+                  id="email" 
+                  name="email"
+                  value="<%= typeof email !== 'undefined' ? email : '' %>"
                   required 
                 />
 

@@ -1,5 +1,7 @@
 const express = require("express");
 const path = require("path");
+const bcrypt = require('bcrypt');
+const session = require('express-session');
 const connectToDatabase = require("./config/dbConfig");
 const logger = require("./lib/logger");
 const { locations } = require("./constants");
@@ -11,24 +13,65 @@ const PORT = process.env.PORT || 3001;
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+app.use(session({
+  secret: 'your-secret-key', // In production, use environment variable
+  resave: false,
+  saveUninitialized: false
+}));
+
+// Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Global database connection
-let db;
+// Database middleware - will be initialized after connection
+app.use((req, res, next) => {
+  if (!app.locals.db) {
+    return res.status(500).json({ error: "Database not connected yet. Please try again later." });
+  }
+  req.db = app.locals.db; // Make db available in route handlers
+  next();
+});
 
-// GET route - Display login page
+// Authentication middleware to check if user is authenticated
+function checkAuthentication(req, res, next) {
+  if (req.session.userId) {
+    return next();
+  }
+  res.redirect('/login');
+}
+
+// Application startup function that ensures database connection before server start
+async function startApplication() {
+  try {
+    // Connect to database first
+    const { client, database } = await connectToDatabase();
+    logger.log("MongoDB connection established");
+    
+    // Store database connection in app.locals for global access
+    app.locals.db = database;
+    
+    // Start server only after successful database connection
+    startServer(PORT);
+  } catch (err) {
+    logger.errorLog("Failed to start application:", err);
+    process.exit(1);
+  }
+}
+
+// Routes
 app.get("/", (req, res) => {
+  res.redirect("/login");
+});
+
+app.get("/login", (req, res) => {
   res.render("login", { error: null, email: "", showRegistrationLink: false });
 });
 
-// POST route - Handle login
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Input validation
     if (!email || !password) {
       return res.render("login", {
         error: "Please provide both email and password",
@@ -37,7 +80,6 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.render("login", {
@@ -47,8 +89,7 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    // Find user in database
-    const user = await db.collection("users").findOne({
+    const user = await req.db.collection("users").findOne({
       email: email.toLowerCase(),
     });
 
@@ -60,8 +101,8 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    // Simple password comparison (not secure for production)
-    if (password !== user.password) {
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
       return res.render("login", {
         error: "Incorrect password. Please try again.",
         email,
@@ -69,8 +110,11 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    // Successful login
-    res.redirect("/dashboard");
+    // Set the session after successful login
+    req.session.userId = user._id;
+    req.session.email = user.email;
+
+    res.redirect("/home");
   } catch (error) {
     logger.errorLog("Login error:", error);
     res.render("login", {
@@ -81,30 +125,15 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Add this route to handle GET requests to /login
-app.get("/login", (req, res) => {
-  res.render("login", { error: null, email: "", showRegistrationLink: false });
-});
-
-// Keep your existing root route as a redirect to /login
-app.get("/", (req, res) => {
-  res.redirect("/login");
-});
-
-// GET route - Homepage after login
-app.get("/home", (req, res) => {
+app.get("/home", checkAuthentication, (req, res) => {
   console.log("GET /home route hit");
   res.render("home");
 });
 
-// Dynamic route to handle all location pages
-app.get("/:category/:location", (req, res) => {
+app.get("/:category/:location", checkAuthentication, (req, res) => {
   const { category, location } = req.params;
-
-  // Find the location data from the locations array
-  const locationData = locations.find(loc => loc.url === `/${category}/${location}`)
-
-  // Ensure the location exists in locationData
+  const locationData = locations.find(loc => loc.locationUrl === `/${category}/${location}`);
+  
   if (locationData) {
     res.render('location', locationData);
   } else {
@@ -112,16 +141,9 @@ app.get("/:category/:location", (req, res) => {
   }
 });
 
-
-///////////////////////// POST route for search ^_^ (25%)///////////////////////////////
-
-app.post("/search", (req, res) => {
-  // Check for search term in both req.body and req.query
+app.post("/search", checkAuthentication, (req, res) => {
   const searchTerm = req.body.Search || req.body.search || req.query.search || '';
   
-  console.log("Search term received:", searchTerm);
-
-  // If no search term, redirect back to home or render an error page
   if (!searchTerm) {
     return res.render('searchedStuff', { 
       results: [], 
@@ -129,122 +151,151 @@ app.post("/search", (req, res) => {
     });
   }
 
-  // Filter locations based on the search term (case-insensitive)
   const results = locations.filter((location) => {
     return location.name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // Render search results page
   res.render('searchedStuff', { 
     results: results,
-    searchTerm: searchTerm // Pass search term back to the view
+    searchTerm: searchTerm
   });
 });
 
-// Add a GET route for search to handle URL parameters
-app.get("/search", (req, res) => {
+app.get("/search", checkAuthentication, (req, res) => {
   const searchTerm = req.query.search || '';
-  
-  console.log("Search term from URL:", searchTerm);
-
-  // Filter locations based on the search term (case-insensitive)
   const results = locations.filter((location) => {
     return location.name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  // Render search results page
   res.render('searchedStuff', { 
     results: results,
-    searchTerm: searchTerm // Pass search term back to the view
+    searchTerm: searchTerm
   });
 });
 
-// Easter Egg
-app.get("/helloKitty", (req, res) => {
-  res.render("rome");
-})
+// app.get("/helloKitty", (req, res) => {
+//   res.render("rome");
+// });
 
-// GET route - Dashboard (just as an example)
-app.get("/dashboard", (req, res) => {
-  res.render("dashboard", { locations});
+app.get("/dashboard", checkAuthentication, (req, res) => {
+  res.render("dashboard", { locations });
 });
 
-// GET route - Registration page
-app.get("/registration", (req, res) => {
-  res.render("registration");
-});
-
-app.post("/register", async (req, res) => {
+app.post("/registration", async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    // Input validation (add more as needed)
-    if (!username || !password) {
-      return res.render("registration", {
-        error: "Please provide both username and password",
-        username: username || "", // Keep the entered username
+    if (!email || !password) {
+      return res.render("registration", { 
+        error: "Email and password are required.",
+        email: email || ""
       });
     }
 
-    // Check if user already exists
-    const existingUser = await db.collection("users").findOne({ username });
+    const usersCollection = req.db.collection("users");
+    const existingUser = await usersCollection.findOne({ email });
+    
     if (existingUser) {
       return res.render("registration", {
-        error: "Username already exists",
-        username: username || "",
+        error: "This user is already registered.",
+        email: email
       });
     }
 
-    // Hash the password (important for security - use bcrypt or similar in production)
-    const hashedPassword = password; // Replace with actual hashing
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = {
+      email,
+      password: hashedPassword,
+      wantToGoList: []
+    };
 
-    // Insert the new user into the database
-    await db
-      .collection("users")
-      .insertOne({ username, password: hashedPassword });
+    const result = await usersCollection.insertOne(newUser);
+    
+    // Set up session for automatic login
+    req.session.userId = result.insertedId;
+    req.session.email = newUser.email;
 
-    // Redirect to login page or dashboard after successful registration
-    res.redirect("/");
-  } catch (error) {
-    logger.errorLog("Registration error:", error);
+    // Redirect directly to dashboard
+    res.redirect("/dashboard");
+  } catch (err) {
+    console.error("Error registering user:", err);
     res.render("registration", {
       error: "An unexpected error occurred. Please try again later.",
-      username: req.body.username || "",
+      email: req.body.email || ""
     });
   }
 });
 
-// GET route - Want-to-go page
-app.get("/want-to-go", (req, res) => {
-  res.render("want-to-go");
+// Update the GET route to handle error display
+app.get("/registration", (req, res) => {
+  res.render("registration", { error: null, email: "" });
 });
 
-// GET route - Want-to-go page
-app.get("/hiking", (req, res) => {
+app.get("/want-to-go", checkAuthentication, async (req, res) => {
+  const user = await req.db.collection("users").findOne({ email: req.session.email });
+
+  if (!user) {
+    return res.redirect("/login");
+  }
+
+  // Render the 'want-to-go' page with the user's want-to-go list
+  res.render("want-to-go", { places: user.wantToGoList });
+});
+
+
+app.post("/add-to-want-to-go", checkAuthentication, async (req, res) => {
+  const { locationName, image, description, video, locationUrl } = req.body;
+  const userEmail = req.session.email;
+
+  try {
+    const user = await req.db.collection("users").findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    if (user.wantToGoList.some(place => place.locationName === locationName)) {
+      return res.render("location", {
+        name: locationName,
+        image,
+        description,
+        video,
+        locationUrl,
+        errorMessage: "This location is already in your want-to-go list."
+      });
+    }
+
+    await req.db.collection("users").updateOne(
+      { email: userEmail },
+      { $push: { wantToGoList: { locationName, image, description, video, locationUrl } } }
+    );
+
+    res.render("location", {
+      name: locationName,
+      image,
+      description,
+      video,
+      locationUrl,
+      successMessage: "Location added to your want-to-go list successfully."
+    });
+  } catch (err) {
+    console.error("Error adding location to want-to-go list:", err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/hiking", checkAuthentication, (req, res) => {
   res.render("hiking");
 });
 
-// GET route - Want-to-go page
-app.get("/cities", (req, res) => {
+app.get("/cities", checkAuthentication, (req, res) => {
   res.render("cities");
 });
 
-// GET route - Want-to-go page
-app.get("/islands", (req, res) => {
+app.get("/islands", checkAuthentication, (req, res) => {
   res.render("islands");
 });
 
-// MongoDB connection setup
-connectToDatabase()
-  .then((client) => {
-    logger.log("MongoDB connection established");
-    db = client.db("yourDatabaseName"); // Store the database connection
-  })
-  .catch((err) => {
-    logger.errorLog("MongoDB connection failed");
-  });
-
-// Start server with a dynamic port checker
+// Server startup function with port checking
 function startServer(port) {
   app
     .listen(port, () => {
@@ -261,4 +312,5 @@ function startServer(port) {
     });
 }
 
-startServer(PORT);
+// Start the application
+startApplication();

@@ -29,34 +29,34 @@ const ansiColors = {
 const places = [
   { 
     name: "annapuna", 
-    url: "/hiking/annapuna" 
+    locationUrl: "/hiking/annapuna" 
   },
   { 
     name: "bali", 
-    url: "/islands/bali" 
+    locationUrl: "/islands/bali" 
   },
   { 
     name: "inca", 
-    url: "/hiking/inca" 
+    locationUrl: "/hiking/inca" 
   },
   { 
     name: "paris", 
-    url: "/cities/paris" 
+    locationUrl: "/cities/paris" 
   },
   { 
     name: "rome", 
-    url: "/cities/rome" 
+    locationUrl: "/cities/rome" 
   },
   { 
     name: "santorini", 
-    url: "/islands/santorini" 
+    locationUrl: "/islands/santorini" 
   },
 ];
 
 const locations = [
   {
     name: 'Annapurna',
-    url: '/hiking/annapurna',
+    locationUrl: '/hiking/annapurna',
     image: '/annapurna.png',
     price: '$1,139/mo',
     background: '/background_annapurna.jpg',
@@ -65,7 +65,7 @@ const locations = [
   },
   {
     name: 'Bali',
-    url: '/islands/bali',
+    locationUrl: '/islands/bali',
     image: '/bali.png',
     price: '$1,139/mo',
     background: '/background_bali.jpg',
@@ -74,7 +74,7 @@ const locations = [
   },
   {
     name: 'Inca',
-    url: '/hiking/inca',
+    locationUrl: '/hiking/inca',
     image: '/inca.png',
     price: '$1,139/mo',
     background: '/background_inca.jpg',
@@ -83,16 +83,16 @@ const locations = [
   },
   {
     name: 'Paris',
-    url: '/cities/paris',
+    locationUrl: '/cities/paris',
     image: '/paris.png',
     price: '$1,139/mo',
     background: '/background_paris.jpg',
     description: 'Paris, the enchanting capital of France, is a global hub of art, fashion, and gastronomy. Known as the "City of Light," it dazzles with its iconic landmarks such as the Eiffel Tower, the Louvre Museum, and Notre-Dame Cathedral. Stroll through its charming cobblestone streets, indulge in world-renowned French cuisine, or relax in the elegant gardens of Luxembourg or Tuileries. Paris is a timeless city that seamlessly blends historical charm with modern sophistication.',
-    video: '/paris.mp4'
+    video: 'https://www.youtube.com/embed/P3RWXEvaiwo?si=KQ8yW48PbGVB1_KO'
   },
   {
     name: 'Rome',
-    url: '/cities/rome',
+    locationUrl: '/cities/rome',
     image: '/rome.png',
     price: '$1,139/mo',
     background: '/background_rome.jpg',
@@ -101,12 +101,12 @@ const locations = [
   },
   {
     name: 'Santorini',
-    url: '/islands/santorini',
+    locationUrl: '/islands/santorini',
     image: '/santorini.png',
     price: '$2,875/mo',
     background: '/background3.jpg',
     description: 'Santorini, a gem of the Aegean Sea, captivates visitors with its stunning turquoise waters, whitewashed buildings with blue-domed roofs, and dramatic volcanic cliffs. Famous for its breathtaking sunsets over the caldera, Santorini offers a wealth of activities, from wine-tasting tours at local vineyards to exploring ancient archaeological sites like Akrotiri. Its idyllic setting, coupled with authentic Greek cuisine and proximity to other islands for hopping adventures, makes it one of the most popular destinations for travelers seeking romance and relaxation.',
-    video: '/santorini.mp4'
+    video: 'https://www.youtube.com/embed/O3U7vAVUca0?si=KyYRGD8XIGS6N3si'
   }
 ];
 

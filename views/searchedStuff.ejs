@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Search Results</title>
+  <title>Digital Nomads | Search Results</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
   <link rel="stylesheet" href="/css/globals.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -93,7 +93,7 @@
         <div class="result-card text-center">
           <img src="<%= location.image %>" alt="<%= location.name %>" class="category-image">
           <h2 class="text-xl font-semibold text-gray-800 mb-2"><%= location.name %></h2>
-          <a href="<%= location.url %>" class="view-btn">View Details</a>
+          <a href="<%= location.locationUrl %>" class="view-btn">View Details</a>
         </div>
       <% }) %>
     <% } else { %>

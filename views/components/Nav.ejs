@@ -1,26 +1,36 @@
-<div class="navbar bg-white fixed top-0 left-0 right-0 z-10 px-6 py-4">
-  <div class="container mx-auto flex justify-between items-center">
-    <a href="/home" class="navbar-title">MyEgypt</a>
-    <div class="flex flex-row bg-white p-2">
-      <form action="/search" method="POST" class="flex flex-row bg-white p-2">
+<div class="navbar bg-white fixed top-0 left-0 right-0 z-10 px-6 py-4 w-full">
+  <div class="container mx-auto flex items-center justify-between gap-4">
+    <!-- Logo - natural width -->
+    <a href="/home" class="navbar-title shrink-0">Digital Nomads</a>
+    
+    <!-- Search - flexible growth -->
+    <div class="flex-grow flex justify-center max-w-md">
+      <form action="/search" method="POST" class="flex w-full no-form-styling">
         <input 
           type="text"
           name="Search"
           placeholder="Search" 
-          class="search-input rounded-none rounded-l-full px-4 py-2 border-none outline-none"
+          class="search-input border-2 border-['#0891b2'] flex-grow rounded-none rounded-l-full px-4 py-2 border-none outline-none"
         />
-        <button class="search-btn font-semibold">
+        <button class="search-btn font-semibold whitespace-nowrap">
           Search
         </button>
       </form>
     </div>
-    <div class="flex items-center gap-4">
-      <button onclick="location.href = '/want-to-go';" class="location-wish-btn">
+    
+    <!-- Navigation items - natural width with spacing -->
+    <div class="flex items-center space-x-4 shrink-0">
+      <button onclick="location.href = '/want-to-go';" class="location-wish-btn whitespace-nowrap">
         Want-to-Go List
       </button>
-      <a href="/dashboard" class="location-wish-btn">
+      <a href="/dashboard" class="location-wish-btn whitespace-nowrap">
         Dashboard
       </a>
+      <form action="/logout" method="POST" class="no-form-styling">
+        <button type="submit" class="bg-red-500 px-6 py-2.5 text-white font-bold rounded-full whitespace-nowrap">
+          Logout
+        </button>
+      </form>
     </div>
   </div>
 </div>

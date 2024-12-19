@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= name %></title>
+  <title>Digital Nomads | <%= name %></title>
+  <link rel="stylesheet" href="/css/globals.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -122,7 +123,7 @@
   <%- include('components/Nav') %>
 
   <!-- Main Content -->
-  <div class="container mx-auto mt-28 px-6 grid grid-cols-1 sm:grid-cols-2 gap-12 items-start">
+  <div class="container mx-auto mt-32 px-6 grid grid-cols-1 sm:grid-cols-2 gap-12 items-start">
     <!-- Left: Image -->
     <div class="image-container">
       <img src="<%= image %>" alt="Image of <%= name %>">
@@ -130,19 +131,37 @@
 
     <!-- Right: Title and Description -->
     <div class="content flex flex-col justify-between items-start gap-4">
+      <!-- Display success or error message -->
+      <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+        <div class="success__message"><%= successMessage %></div> 
+      <% } %> 
+      <% if (typeof errorMessage !== 'undefined' && errorMessage) { %> 
+        <div class="error__message"><%= errorMessage %></div> 
+      <% } %>
       <h1 class="font-bold text-xl"><%= name %></h1>
       <p><%= description %></p>
-      <button id="want-to-go" class="location-wish-btn z-10">
-        Add to Want-to-Go List
-      </button>
+      <form action="/add-to-want-to-go" method="POST" class="no-form-styling">
+        <input type="hidden" name="locationName" value="<%= name %>">
+        <input type="hidden" name="image" value="<%= image %>">
+        <input type="hidden" name="description" value="<%= description %>">
+        <input type="hidden" name="video" value="<%= video %>">
+        <input type="hidden" name="locationUrl" value="<%= locationUrl %>">
+        <button id="want-to-go" class="location-wish-btn z-10" type="submit">
+          Add to Want-to-Go List
+        </button>
+      </form>
+      <iframe 
+        class="rounded-lg shadow-lg mt-8" 
+        width="560" 
+        height="315" 
+        src="<%= video %>" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen
+      />
     </div>
-  </div>
-
-  <!-- Video Section -->
-  <div class="container mx-auto mt-12 px-6">
-    <video controls class="rounded-lg shadow-lg w-full">
-      <source src="<%= video %>" type="video/mp4">
-    </video>
   </div>
 
   <!-- Background blob effect -->
@@ -153,3 +172,4 @@
 </body>
 
 </html>
+
