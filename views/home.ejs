@@ -78,6 +78,22 @@
       background-color: #0e7490;
     }
 
+    /* Want-to-Go List Section */
+    .want-to-go-list-btn {
+      background-color: #0891b2;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 9999px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      width: 64%;
+      z-index: 50;
+    }
+
+    .want-to-go-list-btn:hover {
+      background-color: #0e7490;
+    }
+
     /* Responsive Grid */
     @media (min-width: 768px) {
       .categories-grid {
@@ -122,10 +138,10 @@
 
   <!-- Want-to-Go List -->
   <div class="container mx-auto px-6 mt-12 text-center flex flex-col justify-between items-center gap-4">
-    <a href='/want-to-go' class="view-btn w-64 mx-auto">
+    <a href='/want-to-go' class="want-to-go-list-btn">
       Want-to-Go List
     </a>
-    <a href='/dashboard' class="view-btn w-64 mx-auto">
+    <a href='/dashboard' class="want-to-go-list-btn">
       To the dashboard
     </a>
   </div>
