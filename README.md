@@ -14,7 +14,7 @@ Table of Contents
 
 Project Overview
 
-[Your Project Name] is a web application developed using the MERN stack without React (MERN without the “R”). The project leverages HTML, CSS, JavaScript, Node.js, Express, and MongoDB Atlas. It demonstrates a well-structured web application with server-side rendering using EJS (Embedded JavaScript Templates). The project is designed to showcase core web development concepts and integrate MongoDB Atlas for backend data storage without using an ODM like Mongoose.
+This is a web application developed using the MERN stack without React (MERN without the “R”). The project leverages HTML, CSS, JavaScript, Node.js, Express, and MongoDB Atlas. It demonstrates a well-structured web application with server-side rendering using EJS (Embedded JavaScript Templates). The project is designed to showcase core web development concepts and integrate MongoDB Atlas for backend data storage without using an ODM like Mongoose.
 
 Features
 
